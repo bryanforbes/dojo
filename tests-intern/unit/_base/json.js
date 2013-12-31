@@ -81,8 +81,8 @@ define([
 			var testStr = '{func: function(){}, number: Infinity}';
 			var testObj = json.fromJson(testStr);
 
-			assert.equal('function', typeof testObj.func);
-			assert.equal('number', typeof testObj.number);
+			assert.isFunction(testObj.func);
+			assert.isNumber(testObj.number);
 		},
 
 		'toJsonStringObject': function () {
