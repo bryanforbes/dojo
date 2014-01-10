@@ -26,14 +26,14 @@ module.exports = function (grunt) {
 				options: {
 					runType: 'runner',
 					config: 'tests-intern/intern.local',
-					reporters: ['runner']
+					reporters: ['runner', 'console']
 				}
 			},
 			remote: {
 				options: {
 					runType: 'runner',
 					config: 'tests-intern/intern',
-					reporters: ['runner']
+					reporters: ['runner', 'console']
 				}
 			},
 			proxy: {
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
 					runType: 'runner',
 					proxyOnly: true,
 					config: 'tests-intern/intern.proxy',
-					reporters: ['runner']
+					reporters: ['runner', 'console']
 				}
 			}
 		}
