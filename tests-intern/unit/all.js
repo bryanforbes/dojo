@@ -1,6 +1,7 @@
 define([
 	'./_base',
 	'./hash',
+	'/.node', // should these be included, since they fail in browser?
 	'./router',
 	'./string',
 	'./io-query',
