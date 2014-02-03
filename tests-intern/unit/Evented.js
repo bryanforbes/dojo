@@ -51,7 +51,7 @@ define([
 			handle.remove();
 
 			evented.emit('test', { value: 'foo' });
-			assert.strictEqual(listenerCalled, true, 'expected `remove` to stop calls to the listener.');
+			assert.strictEqual(listenerCalled, false, 'expected `remove` to stop calls to the listener.');
 		}
 	});
 });
