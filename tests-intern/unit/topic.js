@@ -3,7 +3,7 @@ define([
 	'intern/chai!assert',
 	'intern/dojo/aspect',
 	'dojo/topic'
-], function (registerSuite, assert, topic) {
+], function (registerSuite, assert, aspect, topic) {
 	var aspectHandle,
 		subscriptionHandles = [];
 
@@ -13,7 +13,8 @@ define([
 		before: function () {
 			aspectHandle = aspect.after(topic, 'subscribe', function (handle) {
 				subscriptionHandles.push(handle);
-			}, true);
+				return handle;
+			});
 		},
 
 		after: function () {
@@ -52,7 +53,7 @@ define([
 			handle.remove();
 
 			topic.publish('/test/foo', 'bar');
-			assert.strictEqual(listenerCalled, true, 'Expected `remove` to stop calls to the listener.');
+			assert.strictEqual(listenerCalled, false, 'Expected `remove` to stop calls to the listener.');
 		},
 
 		'publish argument arity': function () {
@@ -60,7 +61,7 @@ define([
 				actualArguments;
 
 			topic.subscribe('/test/topic', function () {
-				actualArguments = Array.prototype.slice(arguments);
+				actualArguments = Array.prototype.slice.call(arguments);
 			});
 
 			for (var i = 0; i <= 5; ++i) {
