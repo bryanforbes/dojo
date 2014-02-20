@@ -6,8 +6,8 @@ define([
 	registerSuite({
 		name: 'dojo/Evented',
 
-		'on and emit': function () {
-			var evented = new Evented,
+		'.on and .emit': function () {
+			var evented = new Evented(),
 				emittedEvent,
 				listenerCallCount = 0;
 
@@ -26,7 +26,7 @@ define([
 		},
 
 		'on<eventname> methods': function () {
-			var evented = new Evented,
+			var evented = new Evented(),
 				expectedEvent,
 				actualEvent;
 
@@ -42,7 +42,7 @@ define([
 		},
 
 		'removing a listener': function () {
-			var evented = new Evented,
+			var evented = new Evented(),
 				listenerCalled = false;
 
 			var handle = evented.on('test', function () {
@@ -51,7 +51,25 @@ define([
 			handle.remove();
 
 			evented.emit('test', { value: 'foo' });
-			assert.strictEqual(listenerCalled, false, 'expected `remove` to stop calls to the listener.');
+			assert.isFalse(listenerCalled);
+		},
+
+		'listener order': function () {
+			var evented = new Evented();
+			var order = [];
+
+			evented.ontestevent = function () {
+				order.push(1);
+			};
+			evented.on('testevent', function () {
+				order.push(2);
+			});
+			evented.on('testevent', function () {
+				order.push(3);
+			});
+
+			evented.emit('testevent', {});
+			assert.deepEqual(order, [ 1, 2, 3 ]);
 		}
 	});
 });

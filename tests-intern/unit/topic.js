@@ -27,7 +27,7 @@ define([
 			}
 		},
 
-		'subscribe and publish': function () {
+		'.subscribe and .publish': function () {
 			var listenerCallCount = 0,
 				expectedArgument;
 			topic.subscribe('/test/foo', function (event) {
@@ -44,7 +44,7 @@ define([
 			assert.strictEqual(listenerCallCount, 2);
 		},
 
-		'unsubscribe': function () {
+		'unsubscribing': function () {
 			var listenerCalled = false;
 
 			var handle = topic.subscribe('/test/foo', function () {
@@ -53,7 +53,7 @@ define([
 			handle.remove();
 
 			topic.publish('/test/foo', 'bar');
-			assert.strictEqual(listenerCalled, false, 'Expected `remove` to stop calls to the listener.');
+			assert.isFalse(listenerCalled);
 		},
 
 		'publish argument arity': function () {
