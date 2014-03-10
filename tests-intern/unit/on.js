@@ -2,15 +2,16 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'dojo/on',
-	'intern/dojo/Evented',
-	'intern/dojo/_base/array',	// Using in-test version of dojo because intern's version doesn't include array utils
+	'dojo/Evented',
+	'dojo/_base/lang',	// Using in-test version of dojo because intern's version doesn't include lang or array utils
+	'dojo/_base/array',
 	'intern/dojo/has',
 	'intern/dojo/has!host-browser?intern/dojo/dom-construct',
 	'intern/dojo/has!host-browser?intern/dojo/mouse',
 	'intern/dojo/has!host-browser?dojo/query',	// included to test on.selector. using in-test version of dojo
 												// because dojo/on relies on a global dojo.query not in intern's version
 	'intern/dojo/domReady!'
-], function (registerSuite, assert, on, Evented, arrayUtil, has, domConstruct, mouse) {
+], function (registerSuite, assert, on, Evented, lang, arrayUtil, has, domConstruct, mouse) {
 
 	var handles = [];
 
@@ -64,7 +65,6 @@ define([
 			},
 
 			'.emit return value': function () {
-				// TODO: Run jshint on this code w/ our official config
 				var returnValue = on.emit(target, testEventName, { cancelable: false });
 				assert.propertyVal(returnValue, 'cancelable', false);
 
@@ -210,9 +210,6 @@ define([
 					return new Evented();
 				}
 			})
-			// TODO: Test syntheticStopPropagation
-			// TODO: Test `if(!evt){return evt;}`, mouseout/mouseover normalization, keyCode normalization, and preventDefault in _fixEvent
-			// TODO: Test touch-related sections
 		},
 
 		'cannot target non-emitter': function () {
@@ -239,45 +236,46 @@ define([
 			}
 		});
 
-		// TODO: Consider renaming to containerDiv and childSpan to help make the tests more readable
-		var containerNode,
-			childNode;
+		// TODO: Add test to cover syntheticStopPropagation
+		// TODO: Add tests to cover functionality of _fixEvent
+		var containerDiv,
+			childSpan;
 		suite['DOM-specific'] = {
 
 			'beforeEach': function () {
-				containerNode = domConstruct.create('div', null, document.body);
-				childNode = domConstruct.create('span', null, containerNode);
+				containerDiv = domConstruct.create('div', null, document.body);
+				childSpan = domConstruct.create('span', null, containerDiv);
 			},
 			'afterEach': function () {
 				cleanUpListeners();
 
-				domConstruct.destroy(containerNode);
-				containerNode = childNode = null;
+				domConstruct.destroy(containerDiv);
+				containerDiv = childSpan = null;
 			},
 
 			'event.preventDefault': {
 				'native event': function () {
 					var defaultPrevented = false;
 
-					on(childNode, 'click', function (event) {
+					on(childSpan, 'click', function (event) {
 						event.preventDefault();
 						defaultPrevented = event.defaultPrevented;
 					});
 
-					childNode.click();
+					childSpan.click();
 					assert.isTrue(defaultPrevented);
 				},
 				'synthetic event': function () {
 					var secondListenerCalled = false,
 						defaultPrevented = false;
-					on(childNode, 'click', function (event) {
+					on(childSpan, 'click', function (event) {
 						event.preventDefault();
 					});
-					on(containerNode, 'click', function (event) {
+					on(containerDiv, 'click', function (event) {
 						secondListenerCalled = true;
 						defaultPrevented = event.defaultPrevented;
 					});
-					on.emit(childNode, 'click', {bubbles: true, cancelable: true});
+					on.emit(childSpan, 'click', {bubbles: true, cancelable: true});
 					assert.isTrue(secondListenerCalled, 'bubbled synthetic event on div');
 					assert.isTrue(defaultPrevented, 'defaultPrevented set for synthetic event on div');
 				}
@@ -286,47 +284,54 @@ define([
 			'event bubbling': function () {
 				var eventBubbled = false;
 
-				on(containerNode, 'click', function () {
+				on(containerDiv, 'click', function () {
 					eventBubbled = true;
 				});
 
-				childNode.click();
+				childSpan.click();
 				assert.isTrue(eventBubbled, 'expected event to bubble');
 			},
 
 			'event.stopPropagation': function () {
-				var eventBubbled = false;
+				var eventBubbled;
 
-				on(containerNode, 'click', function () {
+				on(containerDiv, 'click', function () {
 					eventBubbled = true;
 				});
-				on(childNode, 'click', function (event) {
+				on(childSpan, 'click', function (event) {
 					event.stopPropagation();
 				});
 
-				childNode.click();
-				assert.isFalse(eventBubbled, 'expected event not to bubble');
+				// Testing with both Element#click and on.emit because they exercise different
+				// code paths, most notably with the browsers that require synthetic dispatch and stopPropagation
+				eventBubbled = false;
+				childSpan.click();
+				assert.isFalse(eventBubbled);
+
+				eventBubbled = false;
+				on.emit(childSpan, 'click', {});
+				assert.isFalse(eventBubbled);
 			},
 
 
 			'event.stopImmediatePropagation': function () {
-				on(childNode, 'click', function (event) {
+				on(childSpan, 'click', function (event) {
 					event.stopImmediatePropagation();
 				});
 
 				var afterStop = false;
-				on(childNode, 'click', function () {
+				on(childSpan, 'click', function () {
 					afterStop = true;
 				});
 
-				childNode.click();
+				childSpan.click();
 				assert.isFalse(afterStop, 'expected no other listener to be called');
 			},
 
 			'emitting events from document and window': function () {
 				// make sure 'document' and 'window' can also emit events
 				var eventEmitted;
-				var iframe = domConstruct.place('<iframe></iframe>', containerNode);
+				var iframe = domConstruct.place('<iframe></iframe>', containerDiv);
 				var globalObjects = [
 					document, window, iframe.contentWindow, iframe.contentDocument || iframe.contentWindow.document
 				];
@@ -342,10 +347,10 @@ define([
 
 			'event delegation': {
 				'CSS selector': function () {
-					var button = domConstruct.create('button', null, childNode);
+					var button = domConstruct.create('button', null, childSpan);
 
 					var listenerCalled = false;
-					on(containerNode, 'button:click', function () {
+					on(containerDiv, 'button:click', function () {
 						listenerCalled = true;
 					});
 					button.click();
@@ -353,7 +358,7 @@ define([
 				},
 
 				'listening on document': function () {
-					var button = domConstruct.create('button', null, childNode);
+					var button = domConstruct.create('button', null, childSpan);
 
 					var listenerCalled = false;
 					on(document, 'button:click', function () {
@@ -364,23 +369,23 @@ define([
 				},
 
 				'CSS selector and text node target': function () {
-					childNode.className = 'textnode-parent';
-					childNode.innerHTML = 'text';
+					childSpan.className = 'textnode-parent';
+					childSpan.innerHTML = 'text';
 
 					var listenerCalled;
-					on(containerNode, '.textnode-parent:click', function () {
+					on(containerDiv, '.textnode-parent:click', function () {
 						listenerCalled = true;
 					});
 
-					on.emit(childNode.firstChild, 'click', { bubbles: true, cancelable: true });
+					on.emit(childSpan.firstChild, 'click', { bubbles: true, cancelable: true });
 					assert.isTrue(listenerCalled);
 				},
 
 				'custom selector': function () {
-					var button = domConstruct.create('button', null, childNode);
+					var button = domConstruct.create('button', null, childSpan);
 
 					var listenerCalled = false;
-					on(containerNode, on.selector(function (node) {
+					on(containerDiv, on.selector(function (node) {
 						return node.tagName === 'BUTTON';
 					}, 'click'), function () {
 						listenerCalled = true;
@@ -392,28 +397,28 @@ define([
 
 				'on.selector and extension events': {
 					'basic extension events': function () {
-						childNode.setAttribute('foo', 2);
+						childSpan.setAttribute('foo', 2);
 						var order = [];
 						var customEvent = function (node, listener) {
 							return on(node, 'custom', listener);
 						};
-						on(containerNode, customEvent, function (event) {
+						on(containerDiv, customEvent, function (event) {
 							order.push(event.a);
 						});
-						on(containerNode, on.selector('span', customEvent), function () {
+						on(containerDiv, on.selector('span', customEvent), function () {
 							order.push(+this.getAttribute('foo'));
 						});
-						on.emit(containerNode, 'custom', {
+						on.emit(containerDiv, 'custom', {
 							a: 0
 						});
 						// should trigger selector
-						on.emit(childNode, 'custom', {
+						on.emit(childSpan, 'custom', {
 							a: 1,
 							bubbles: true,
 							cancelable: true
 						});
 						// shouldn't trigger selector
-						on.emit(containerNode, 'custom', {
+						on.emit(containerDiv, 'custom', {
 							a: 3,
 							bubbles: true,
 							cancelable: true
@@ -441,10 +446,10 @@ define([
 							};
 						};
 
-						on(containerNode, on.selector('span', customEvent), function () {
+						on(containerDiv, on.selector('span', customEvent), function () {
 							listenerCalled = true;
 						});
-						on.emit(childNode, 'custom', { bubbles: true });
+						on.emit(childSpan, 'custom', { bubbles: true });
 						assert.isTrue(listenerCalled);
 						assert.isTrue(bubbleListenerCalled);
 					}
@@ -452,13 +457,13 @@ define([
 			},
 
 			'event augmentation': function () {
-				var button = domConstruct.create('button', null, containerNode);
+				var button = domConstruct.create('button', null, containerDiv);
 				on(button, 'click', function (event) {
 					event.modified = true;
 					event.test = 3;
 				});
 				var testValue;
-				on(containerNode, 'click', function (event) {
+				on(containerDiv, 'click', function (event) {
 					testValue = event.test;
 				});
 				button.click();
@@ -466,13 +471,20 @@ define([
 			}
 		};
 
+		// TODO: Add tests to improve touch-related code coverage
 		has('touch') && (suite['DOM-specific']['touch event normalization'] = function () {
 			var div = document.body.appendChild(document.createElement('div'));
+
+			var lastEvent;
 			on(div, 'touchstart', function (event) {
-				assert.property(event, 'rotation');
-				assert.property(event, 'pageX');
+				// Copying event properties to an object because certain versions of Firefox
+				// threw insecure operation errors when saving an event to a closure-bound variable.
+				lastEvent = lang.mixin({}, event);
 			});
 			on.emit(div, 'touchstart', { changedTouches: [{ pageX: 100 }] });
+
+			assert.property(lastEvent, 'rotation');
+			assert.property(lastEvent, 'pageX');
 		});
 	}
 
