@@ -66,9 +66,11 @@ define([
 
 			'.emit return value': function () {
 				var returnValue = on.emit(target, testEventName, { cancelable: false });
+				assert.ok(returnValue);
 				assert.propertyVal(returnValue, 'cancelable', false);
 
 				returnValue = on.emit(target, testEventName, { cancelable: true });
+				assert.ok(returnValue);
 				assert.propertyVal(returnValue, 'cancelable', true);
 
 				on(target, testEventName, function (event) {
