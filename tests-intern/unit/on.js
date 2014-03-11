@@ -10,7 +10,7 @@ define([
 	'intern/dojo/has!host-browser?intern/dojo/mouse',
 	'intern/dojo/has!host-browser?dojo/query',	// included to test on.selector. using in-test version of dojo
 												// because dojo/on relies on a global dojo.query not in intern's version
-	'intern/dojo/domReady!'
+	'intern/dojo/has!host-browser?intern/dojo/domReady!'
 ], function (registerSuite, assert, on, Evented, lang, arrayUtil, has, domConstruct, mouse) {
 
 	var handles = [];
