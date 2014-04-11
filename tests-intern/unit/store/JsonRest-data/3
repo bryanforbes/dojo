@@ -1,0 +1,1 @@
+{ id: 3, name: 'three',	even: false,	prime: true,	mappedTo: 'C', date: new Date(1990, 2, 3) }
