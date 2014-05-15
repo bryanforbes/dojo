@@ -5,6 +5,7 @@ define([
 	'./request',
 	'./store/Memory',
 	'./string',
+	'./Deferred',
 	'./regexp',
 	'./when',
 
