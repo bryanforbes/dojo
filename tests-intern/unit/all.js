@@ -8,6 +8,7 @@ define([
 	'./regexp',
 	'./when',
 	'./date',
+	'./Deferred',
 
 	// host-specific tests
 	'intern/dojo/has!host-browser?./dom-form',
