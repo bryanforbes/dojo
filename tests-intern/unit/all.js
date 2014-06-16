@@ -6,6 +6,7 @@ define([
 	'./store/Memory',
 	'./string',
 	'./regexp',
+	'./topic',
 	'./when',
 
 	// host-specific tests
