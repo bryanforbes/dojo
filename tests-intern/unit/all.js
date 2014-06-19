@@ -10,6 +10,8 @@ define([
 	'./on',
 	'./Evented',
 	'./topic',
+	'./date',
+	'./Deferred',
 
 	// host-specific tests
 	'intern/dojo/has!host-browser?./dom-form',
