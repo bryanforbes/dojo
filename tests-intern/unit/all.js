@@ -1,5 +1,6 @@
 define([
 	'./_base',
+	'./_base/lang',
 	'./AdapterRegistry',
 	'./colors',
 	'./io-query',
