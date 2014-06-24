@@ -1,3 +1,16 @@
+// Supplies useLoader with a dojoConfig enabling require.undef()
+// dojoConfig needs to be defined here, otherwise it's too late to affect the dojo loader api
+;(function(global) {
+	global.dojoConfig = {
+		async: true,
+		tlmSiblingOfDojo: false,
+		useDeferredInstrumentation: false,
+		has: {
+			'dojo-undef-api': true
+		}
+	};
+})((function() { return this; })());
+
 // Learn more about configuring this file at <https://github.com/theintern/intern/wiki/Configuring-Intern>.
 // These default settings work OK for most people. The options that *must* be changed below are the
 // packages, suites, excludeInstrumentation, and (if you want functional tests) functionalSuites.
@@ -44,6 +57,13 @@ define({
 	webdriver: {
 		host: 'localhost',
 		port: 4444
+	},
+
+	// The desired AMD loader to use when running unit tests (client.html/client.js). Omit to use the default Dojo
+	// loader
+	useLoader: {
+		'host-node': './dojo.js',
+		'host-browser': '../dojo.js'
 	},
 
 	// Configuration options for the module loader; any AMD configuration options supported by the specified AMD loader
