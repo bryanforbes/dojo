@@ -1,0 +1,7 @@
+[
+    { id: 1, name: 'one',	even: false,	prime: false,	mappedTo: 'E', date: new Date(1970, 0, 1) },
+    { id: 2, name: 'two',	even: true,		prime: true,	mappedTo: 'D', date: new Date(1980, 1, 2) },
+    { id: 3, name: 'three',	even: false,	prime: true,	mappedTo: 'C', date: new Date(1990, 2, 3) },
+    { id: 4, name: 'four',	even: true,		prime: false,	mappedTo: null, date: new Date(1972, 3, 6, 12, 1) },
+    { id: 5, name: 'five',	even: false,	prime: true,	mappedTo: 'A', date: new Date(1972, 3, 6, 6, 2) }
+]
