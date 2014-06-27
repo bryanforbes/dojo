@@ -4,7 +4,6 @@ define([
 	'intern/chai!assert',
 ], function (require, registerSuite, assert) {
 	/*jshint -W020 */
-	/* global moveEvents, downEvents */
 	registerSuite({
 		name: 'mouseenter/mouseleave',
 

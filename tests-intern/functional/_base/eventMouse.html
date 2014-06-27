@@ -30,11 +30,7 @@
 	<script type="text/javascript">
 		var ready = false;
 		dojo.addOnLoad(function () {
-			// Log of events, used by automated test harness
-			moveEvents = [];
-			clickEvents = [];
-			downEvents = [];
-
+            
 			dojo.connect(dojo.byId('outer'), 'onmouseenter', function (evt) {
                 var targetId = evt.target.id;
 
