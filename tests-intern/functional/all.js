@@ -1,5 +1,6 @@
 define([
 	'./behavior',
 	'./on',
-	'./_base/eventMouse'
+	'./_base/eventMouse',
+	'./window'
 ], function () {});
