@@ -1,4 +1,6 @@
 module.exports = function (grunt) {
+	console.log('PLATFORM:', process.platform);
+	console.log('ARCH:', process.arch);
 	grunt.loadNpmTasks('intern-geezer');
 
 	var req = (function () {
