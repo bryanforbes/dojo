@@ -5,7 +5,7 @@ define([
 	intern.tunnel = 'NullTunnel';
 	intern.tunnelOptions = {
 		hostname: 'localhost',
-		port: 4444
+		port: 4445
 	};
 
 	intern.capabilities = {
