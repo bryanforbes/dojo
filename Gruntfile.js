@@ -46,6 +46,13 @@ module.exports = function (grunt) {
 					reporters: ['runner']
 				}
 			},
+			ci: {
+				options: {
+					runType: 'runner',
+					config: 'tests-intern/intern.ci',
+					reporters: ['runner']
+				}
+			},
 			node: {
 				options: {
 					runType: 'client',

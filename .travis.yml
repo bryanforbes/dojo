@@ -1,6 +1,10 @@
 language: node_js
 node_js:
   - "0.10"
+addons:
+  sauce_connect:
+    username: "dojo2-ts-ci"
+    access_key: "e92610e3-834e-4bec-a3b5-6f7b9d874601"
 env:
   global:
     # Sauce Labs are OK with this and it is currently necessary to expose this information for testing pull requests;
@@ -9,4 +13,4 @@ env:
     - SAUCE_ACCESS_KEY: e92610e3-834e-4bec-a3b5-6f7b9d874601
 before_script:
   - "npm install -g grunt-cli"
-script: "grunt --verbose test:remote"
+script: "grunt --verbose test:ci"
