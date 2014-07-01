@@ -53,7 +53,7 @@ define([
 		};
 	}
 
-	exports.start = function (port) {
+	exports.start = function (proxyHost, port) {
 		return nodefn.call(glob, '**/*.service.js', {
 			cwd: './tests-intern/services'
 		}).then(function (files) {
@@ -110,7 +110,7 @@ define([
 				}
 				else {
 					proxy.proxyRequest(request, response, {
-						host: 'localhost',
+						host: proxyHost || 'localhost',
 						port: 9000
 					});
 				}

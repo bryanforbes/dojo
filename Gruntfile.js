@@ -1,3 +1,4 @@
+/* jshint node:true */
 module.exports = function (grunt) {
 	grunt.loadNpmTasks('intern-geezer');
 
@@ -36,6 +37,13 @@ module.exports = function (grunt) {
 					reporters: ['runner']
 				}
 			},
+			remoteCi: {
+				options: {
+					runType: 'runner',
+					config: 'tests-intern/intern.ci',
+					reporters: ['runner']
+				}
+			},
 			proxy: {
 				options: {
 					runType: 'runner',
@@ -55,10 +63,10 @@ module.exports = function (grunt) {
 	});
 
 	var servicesServer;
-	grunt.registerTask('proxy', function () {
+	grunt.registerTask('proxy', function (proxyHost) {
 		var done = this.async();
 		req(['dojo/tests-intern/services/main'], function (services) {
-			services.start().then(function (server) {
+			services.start(proxyHost).then(function (server) {
 				servicesServer = server;
 				done(true);
 			});
@@ -66,32 +74,50 @@ module.exports = function (grunt) {
 	});
 
 	grunt.registerTask('test', function (target) {
+		function addReporter(reporter, target) {
+			var property = 'intern.' + target + '.options.reporters',
+				value = grunt.config.get(property);
+ 
+			if (value.indexOf(reporter) !== -1) {
+				return;
+			}
+ 
+			value.push(reporter);
+			grunt.config.set(property, value);
+		}
+
+		function runIntern(target, isCombined, isCi) {
+			if (self.flags.console) {
+				addReporter('console', target);
+			}
+
+			if (self.flags.coverage) {
+				addReporter((isCi || isCombined) ? 'combined' : 'lcovhtml', target);
+			}
+	 
+			if (target !== 'node') {
+				grunt.task.run('proxy' + (isCi ? ':intern.dev' : ''));
+			}
+
+			grunt.task.run('intern:' + target);
+		}
+
+		var self = this;
+
 		if (!target || target === 'coverage') {
 			target = 'remote';
 		}
 
-		function addReporter(reporter) {
-			var property = 'intern.' + target + '.options.reporters',
-				value = grunt.config.get(property);
-
-			if (value.indexOf(reporter) !== -1) {
-				return;
-			}
-
-			value.push(reporter);
-			grunt.config.set(property, value);
+		if (target === 'ci') {
+			runIntern('node', true, true);
+			runIntern('remoteCi', true, true);
 		}
-		if (this.flags.coverage) {
-			addReporter('lcovhtml');
+		else if (target === 'all') {
+			runIntern('node', true, false);
+			runIntern('remote', true, false);
 		}
-
-		if (this.flags.console) {
-			addReporter('console');
+		else {
+			runIntern(target);
 		}
-
-		if (target !== 'node') {
-			grunt.task.run('proxy');
-		}
-		grunt.task.run('intern:' + target);
 	});
 };
