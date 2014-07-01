@@ -3,8 +3,8 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'dojo/main',
-	'dojo/store/JsonRest',
-	'dojo/store/Memory',
+	'intern/dojo/store/JsonRest',
+	'intern/dojo/store/Memory',
 	'dojo/data/ObjectStore',
 	'dojo/has'
 ], function (require, registerSuite, assert, dojo, JsonRest, Memory, ObjectStore, has) {
