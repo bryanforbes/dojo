@@ -15,15 +15,12 @@ define([
 	'./json',
 	'./currency',
 	'./date',
-<<<<<<< HEAD
 	// './date/locale',
 	// './date/stamp',
-=======
-	'./date/locale',
-	'./date/stamp',
 	'./data/ItemFileReadStore',
 	'./data/ItemFileWriteStore',
->>>>>>> ItemFileRead/ItemFileWrite
+	'./data/ObjectStore',
+	'./data/utils',
 
 	 // host-specific tests
 	'intern/dojo/has!host-browser?./dom-form',

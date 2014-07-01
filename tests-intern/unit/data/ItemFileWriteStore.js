@@ -17,6 +17,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 			}
 			assert.strictEqual(count, 4);
 		},
+		
 		'Write API: setValue': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -41,6 +42,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: setValues': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -67,6 +69,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: unsetAttribute': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -91,6 +94,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: newItem': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async(),
@@ -126,6 +130,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: newItem with parent': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -189,6 +194,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: newItem with parent multiple': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -250,6 +256,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: deleteItem': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -283,6 +290,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: isDirty': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -304,6 +312,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: revert': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -340,6 +349,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: save': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -357,6 +367,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: save (verify state)': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -381,6 +392,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: save (save everything)': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async(),
@@ -420,6 +432,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: save (save everything, no hierarchy)': function() {
 			var store = new ItemFileWriteStore(mockData('geography_hierarchy_small')),
 				deferred = this.async(),
@@ -466,6 +479,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				}
 			});
 		},
+		
 		'Write API: save (save everything with datatype)': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -500,6 +514,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: save (save everything with color type simple)': function() {
 			var customTypeMap = {
 				'Color': dojo.Color
@@ -554,6 +569,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: save (save everything with color type general)': function() {
 			var customTypeMap = {
 				'Color': {
@@ -616,6 +632,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: newItem revert': function() {
 			var store = new ItemFileWriteStore({
 				data: {
@@ -654,6 +671,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 			store.revert();
 			assert.isNull(store._arrayOfAllItems[itemEntryNum], null);
 		},
+		
 		'Write API: newItem modify revert': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async;
@@ -689,6 +707,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: newItem modify delete revert': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async,
@@ -749,6 +768,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: onSet': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = new this.async();
@@ -775,6 +795,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Write API: onNew': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = new this.async(),
@@ -793,6 +814,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				capital: 'Ottawa'
 			});
 		},
+		
 		'Write API: onDelete': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
 				deferred = this.async();
@@ -816,6 +838,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				onError: deferred.reject
 			});
 		},
+		
 		'Read API: Read Function Conformance': function () {
 			var testStore = new ItemFileWriteStore(mockData('countries')),
 				readApi = new Read(),
@@ -834,6 +857,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 
 			assert.isTrue(passed);
 		},
+		
 		'Read API: Write Function Conformance': function () {
 			var testStore = new ItemFileWriteStore(mockData('countries')),
 				readApi = new Write(),
@@ -852,6 +876,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 
 			assert.isTrue(passed);
 		},
+		
 		'Read API: Notification Function Conformance': function () {
 			var testStore = new ItemFileWriteStore(mockData('countries')),
 				readApi = new Notification(),
