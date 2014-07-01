@@ -1,21 +1,39 @@
-define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/data/ItemFileWriteStore', 'dojo/main', './mock/data', 'dojo/data/api/Read', 'dojo/data/api/Write', 'dojo/data/api/Notification', 'dojo/has'], function(registerSuite, assert, itemFileReadTests, ItemFileWriteStore, dojo, mockData, Read, Write, Notification, has) {
+define([
+	'intern!object',
+	'intern/chai!assert',
+	'./ItemFileReadTemplate',
+	'dojo/data/ItemFileWriteStore',
+	'dojo/main',
+	'./mock/data',
+	'dojo/data/api/Read',
+	'dojo/data/api/Write',
+	'dojo/data/api/Notification',
+	'dojo/has',
+	'dojo/date'
+], function(registerSuite, assert, itemFileReadTests, ItemFileWriteStore, dojo, mockData,
+	Read, Write, Notification, has, date) {
+	
+	// First, make sure all ItemFileReadStore superclass tests are OK
 	itemFileReadTests('data/ItemFileWriteStore: Read & Identity', ItemFileWriteStore);
+	
 	registerSuite({
-		name: 'data/ItemFileWriteStore: Write',
+		name: 'data/ItemFileWriteStore: Write & Notification',
+
 		'getFeatures': function() {
 			var store = new ItemFileWriteStore(mockData('countries')),
-				features = store.getFeatures();
+				features = store.getFeatures(),
+				callback = this.async(null, 4).callback(function () { });
+
 			assert.isNotNull(features['dojo.data.api.Read']);
 			assert.isNotNull(features['dojo.data.api.Identity']);
 			assert.isNotNull(features['dojo.data.api.Write']);
 			assert.isNotNull(features['dojo.data.api.Notification']);
 			assert.isUndefined(features['foo.bar.nation']);
-			var count = 0;
+
 			for (var i in features) {
 				assert.isTrue(i === 'dojo.data.api.Read' || i === 'dojo.data.api.Identity' || i === 'dojo.data.api.Write' || i === 'dojo.data.api.Notification');
-				count++;
+				callback();
 			}
-			assert.strictEqual(count, 4);
 		},
 		
 		'Write API: setValue': function() {
@@ -492,7 +510,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				function gotItem(item) {
 					var independenceDate = newStore.getValue(item, 'independence');
 					assert.isTrue(independenceDate instanceof Date);
-					assert.strictEqual(dojo.date.compare(new Date(1993, 4, 24), independenceDate, 'date'), 0);
+					assert.strictEqual(date.compare(new Date(1993, 4, 24), independenceDate, 'date'), 0);
 					saveCompleteCallback();
 				}
 				newStore.fetchItemByIdentity({
@@ -846,7 +864,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 
 			for (var functionName in readApi) {
 				var member = readApi[functionName];
-				if(typeof member === 'function'){
+				if (typeof member === 'function'){
 					var testStoreMember = testStore[functionName];
 					if (typeof testStoreMember !== 'function') {
 						passed = false;
@@ -865,7 +883,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 
 			for (var functionName in readApi) {
 				var member = readApi[functionName];
-				if(typeof member === 'function'){
+				if (typeof member === 'function'){
 					var testStoreMember = testStore[functionName];
 					if (typeof testStoreMember !== 'function') {
 						passed = false;
@@ -884,7 +902,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 
 			for (var functionName in readApi) {
 				var member = readApi[functionName];
-				if(typeof member === 'function'){
+				if (typeof member === 'function'){
 					var testStoreMember = testStore[functionName];
 					if (typeof testStoreMember !== 'function') {
 						passed = false;
@@ -1077,14 +1095,14 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 								}
 							}catch(e){/*Not an item, even a dead one, just eat it.*/}
 						}
-						if(badRef){
+						if (badRef){
 							deferred.reject();
 							passed = false;
 							break;
 						}
 					}
 				}
-				if(passed){
+				if (passed){
 					deferred.callback(true);
 				}
 			}
@@ -1215,20 +1233,20 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 									var value = values[k];
 									try{
 										var id = store.getIdentity(value);
-										if(id === 16){
+										if (id === 16){
 											badRef = true;
 											break;
 										}
 									}catch(e){/*Not an item, even a dead one, just eat it.*/}
 								}
-								if(badRef){
+								if (badRef){
 									deferred.reject();
 									passed = false;
 									break;
 								}
 							}
 						}
-						if(passed){
+						if (passed){
 							deferred.resolve();
 						}
 					}
@@ -1317,6 +1335,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 
 		'Read API: close dirty failure': function () {
 			if (!has('host-browser')) { return; }
+
 			var params = mockData('countries');
 			params.clearOnClose = true;
 			params.urlPreventCache = true;
@@ -1336,7 +1355,7 @@ define(['intern!object', 'intern/chai!assert', './ItemFileReadTemplate', 'dojo/d
 				deferred[error ? 'resolve' : 'reject']();
 			};
 
-			store.fetchItembyIdentity({
+			store.fetchItemByIdentity({
 				identity: 'ec',
 				onItem: onItem,
 				onError: deferred.reject

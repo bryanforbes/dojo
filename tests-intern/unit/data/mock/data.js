@@ -1,6 +1,7 @@
 define([
+	'require',
 	'dojo/main'
-], function (dojo) {
+], function (require, dojo) {
 	return function (name) {
 		var data = null;
 		if(name === "reference_integrity"){

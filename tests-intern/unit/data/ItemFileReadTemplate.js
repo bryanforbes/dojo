@@ -1,14 +1,16 @@
 define([
+	'require',
 	'intern!object',
 	'intern/chai!assert',
 	'dojo/main',
 	'dojo/_base/declare',
 	'dojo/has',
 	'./mock/data'
-], function (registerSuite, assert, dojo, declare, has, mockData) {
-	declare('tests.data.Wrapper', null, {
-		// summary:
-		//		Simple class to use for typeMap in order to	test out falsy _values
+], function (require, registerSuite, assert, dojo, declare, has, mockData) {
+	/*
+	 * Simple class to use for typeMap in order to	test out falsy _values
+	 */
+	var Wrapper = declare('tests.data.Wrapper', null, {
 		_wrapped: null,
 
 		constructor: function(obj){
@@ -532,7 +534,7 @@ define([
 			'Read API: fetch() one_commentFilteredJson': function () {
 				if (!has('host-browser')) { return; }
 
-				var store = new Store({url: require.toUrl('./countries_commentFiltered.json')}),
+				var store = new Store({url: require.toUrl('./mock/countries_commentFiltered.json')}),
 					deferred = this.async();
 
 				function onComplete(items){
@@ -1621,7 +1623,7 @@ define([
 			'Read API: errorCondition_idCollision_xhr': function () {
 				if (!has('host-browser')) { return; }
 
-				var store = new Store({url: require.toUrl('./countries_idcollision.json')}),
+				var store = new Store({url: require.toUrl('./mock/countries_idcollision.json')}),
 					deferred = this.async();
 
 				store.fetch({
@@ -1722,9 +1724,9 @@ define([
 							]
 						},
 						typeMap:{'tests.data.Wrapper': {
-							type: tests.data.Wrapper,
+							type: Wrapper,
 							deserialize: function (value) {
-								return new tests.data.Wrapper(value);
+								return new Wrapper(value);
 							}
 						}}
 					}),
@@ -1733,7 +1735,7 @@ define([
 				function onItem(item) {
 					assert.isNotNull(item);
 					var age = store.getValue(item, 'age');
-					assert.isTrue(age instanceof tests.data.Wrapper);
+					assert.isTrue(age instanceof Wrapper);
 					assert.strictEqual(age.toString(), 'WRAPPER: [0]');
 					deferred.resolve();
 				}
@@ -1755,9 +1757,9 @@ define([
 							]
 						},
 						typeMap:{'tests.data.Wrapper': {
-							type: tests.data.Wrapper,
+							type: Wrapper,
 							deserialize: function (value) {
-								return new tests.data.Wrapper(value);
+								return new Wrapper(value);
 							}
 						}}
 					}),
@@ -1766,7 +1768,7 @@ define([
 				function onItem(item) {
 					assert.isNotNull(item);
 					var isHuman = store.getValue(item, 'isHuman');
-					assert.isTrue(isHuman instanceof tests.data.Wrapper);
+					assert.isTrue(isHuman instanceof Wrapper);
 					assert.strictEqual(isHuman.toString(), 'WRAPPER: [false]');
 					deferred.resolve();
 				}
@@ -1788,9 +1790,9 @@ define([
 							]
 						},
 						typeMap:{'tests.data.Wrapper': {
-							type: tests.data.Wrapper,
+							type: Wrapper,
 							deserialize: function (value) {
-								return new tests.data.Wrapper(value);
+								return new Wrapper(value);
 							}
 						}}
 					}),
@@ -1799,7 +1801,7 @@ define([
 				function onItem(item) {
 					assert.isNotNull(item);
 					var lastName = store.getValue(item, 'lastName');
-					assert.isTrue(lastName instanceof tests.data.Wrapper);
+					assert.isTrue(lastName instanceof Wrapper);
 					assert.strictEqual(lastName.toString(), 'WRAPPER: []');
 					deferred.resolve();
 				}
@@ -1821,9 +1823,9 @@ define([
 							]
 						},
 						typeMap:{'tests.data.Wrapper': {
-							type: tests.data.Wrapper,
+							type: Wrapper,
 							deserialize: function (value) {
-								return new tests.data.Wrapper(value);
+								return new Wrapper(value);
 							}
 						}}
 					}),
@@ -1832,7 +1834,7 @@ define([
 				function onItem(item) {
 					assert.isNotNull(item);
 					var lastName = store.getValue(item, 'lastName');
-					assert.isTrue(lastName instanceof tests.data.Wrapper);
+					assert.isTrue(lastName instanceof Wrapper);
 					assert.strictEqual(lastName.toString(), 'WRAPPER: [null]');
 					deferred.resolve();
 				}
@@ -1854,9 +1856,9 @@ define([
 							]
 						},
 						typeMap:{'tests.data.Wrapper': {
-							type: tests.data.Wrapper,
+							type: Wrapper,
 							deserialize: function (value) {
-								return new tests.data.Wrapper(value);
+								return new Wrapper(value);
 							}
 						}}
 					}),
@@ -1865,7 +1867,7 @@ define([
 				function onItem(item) {
 					assert.isNotNull(item);
 					var lastName = store.getValue(item, 'lastName');
-					assert.isTrue(lastName instanceof tests.data.Wrapper);
+					assert.isTrue(lastName instanceof Wrapper);
 					assert.strictEqual(lastName.toString(), 'WRAPPER: [undefined]');
 					deferred.resolve();
 				}
@@ -1916,9 +1918,9 @@ define([
 							val = store.getValue(ec, 'name');
 						assert.strictEqual(val, 'Ecuador');
 						store.close();
-						assert.lengthOf(store._arrayOfAllitems, 0);
 						assert.isFalse(store._loadFinished);
 					}catch (e){
+						console.log(e);
 						error = e;
 					}
 					deferred[error ? 'reject' : 'resolve']();
@@ -1961,10 +1963,9 @@ define([
 							val = store.getValue(ec, 'name');
 						assert.strictEqual(val, 'Ecuador');
 						store.close();
-						assert.lengthOf(store._arrayOfAllitems, 0);
 						assert.isFalse(store._loadFinished);
 
-						store.url = require.toUrl('./countries_withNull.json');
+						store.url = require.toUrl('./mock/countries_withNull.json');
 						store.fetchItemByIdentity({
 							identity: 'ec',
 							onItem: onItem2,
@@ -2014,10 +2015,9 @@ define([
 							val = store.getValue(ec, 'name');
 						assert.strictEqual(val, 'Ecuador');
 						store.close();
-						assert.lengthOf(store._arrayOfAllitems, 0);
 						assert.isFalse(store._loadFinished);
 
-						store.url = require.toUrl('./countries_withNull.json');
+						store.url = require.toUrl('./mock/countries_withNull.json');
 						store.fetch({
 							query: {abbr: 'ec'},
 							onComplete: onComplete,
@@ -2065,10 +2065,9 @@ define([
 							val = store.getValue(ec, 'name');
 						assert.strictEqual(val, 'Ecuador');
 						store.close();
-						assert.lengthOf(store._arrayOfAllitems, 0);
 						assert.isFalse(store._loadFinished);
 
-						store.url = require.toUrl('./countries_withNull.json');
+						store.url = require.toUrl('./mock/countries_withNull.json');
 						store.fetchItemByIdentity({
 							identity: 'ec',
 							onComplete: onItem2,
@@ -2103,7 +2102,6 @@ define([
 							val = store.getValue(ec, 'name');
 						assert.strictEqual(val, 'Ecuador');
 						store.close();
-						assert.notEqual(store._arrayOfAllitems.length, 0);
 						assert.isTrue(store._loadFinished);
 					}catch (e){
 						error = e;
@@ -2166,7 +2164,7 @@ define([
 					//a reference to the same item (data cleared and reloaded.
 					var secondComplete = function(items){
 						try {
-							assert.lengthOf(items.length, 1);
+							assert.lengthOf(items, 1);
 							var secondItem = items[0];
 							assert.isNotNull(firstItem);
 							assert.isNotNull(secondItem);
@@ -2176,6 +2174,7 @@ define([
 							deferred.reject();
 						}
 					};
+
 					store.fetch({
 						query: {value: 'bar\*foo'},
 						onComplete: secondComplete,

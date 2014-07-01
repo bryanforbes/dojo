@@ -43,7 +43,7 @@ require({
 		}
 
 		registerSuite({
-			name: 'dojo/store/JsonRest',
+			name: 'store/JsonRest',
 
 			'beforeEach': function () {
 				xhrStub.reset();

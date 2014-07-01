@@ -1,4 +1,5 @@
 define([
+	'require',
 	'intern!object',
 	'intern/chai!assert',
 	'dojo/main',
@@ -6,8 +7,8 @@ define([
 	'dojo/store/Memory',
 	'dojo/data/ObjectStore',
 	'dojo/has'
-], function (registerSuite, assert, dojo, JsonRest, Memory, ObjectStore, has) {
-	var restStore = new JsonRest({target: dojo.moduleUrl('dojo.tests.store', '/')}),
+], function (require, registerSuite, assert, dojo, JsonRest, Memory, ObjectStore, has) {
+	var restStore = new JsonRest({target: require.toUrl('./mock/') }),
 		memoryStore = new Memory({
 			data: [
 				{id: 1, name: 'one', prime: false},
@@ -64,7 +65,6 @@ define([
 				assert.strictEqual(object.name, 'one');
 				d.resolve();
 			}});
-			return d;
 		},
 
 		'MemoryQueryEmpty': function () {
@@ -73,7 +73,6 @@ define([
 				assert.strictEqual(results.length, 0);
 				d.resolve();
 			}});
-			return d;
 		},
 
 		'MemoryQueryWithWildcard': function () {
@@ -84,7 +83,6 @@ define([
 				assert.strictEqual(object.name, 'four');
 				d.resolve();
 			}});
-			return d;
 		},
 
 		'MemoryQueryWithEscapedWildcard': function () {
@@ -103,7 +101,6 @@ define([
 				assert.strictEqual(object.name, 's*');
 				d.resolve();
 			}});
-			return d;
 		},
 
 		'MemoryQueryWithWildcardCaseInsensitive': function () {
@@ -114,7 +111,6 @@ define([
 				assert.strictEqual(object.name, 'four');
 				d.resolve();
 			}});
-			return d;
 		},
 
 		'FetchByIdentity': function () {
@@ -125,19 +121,17 @@ define([
 				assert.strictEqual(object.someProperty, 'somePropertyA1');
 				d.resolve();
 			}});
-			return d;
 		},
 
 		'Query': function () {
 			if (!has('host-browser')) { return; }
 			var d = this.async();
-			dataStore.fetch({query:'treeTestRoot', onComplete: function(results){
+			dataStore.fetch({query: 'treeTestRoot', onComplete: function(results){
 				var object = results[0];
 				assert.strictEqual(object.name, 'node1');
 				assert.strictEqual(object.someProperty, 'somePropertyA');
 				d.resolve();
 			}});
-			return d;
 		}
 	});
 });

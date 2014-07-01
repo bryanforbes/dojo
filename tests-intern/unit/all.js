@@ -17,10 +17,7 @@ define([
 	'./date',
 	// './date/locale',
 	// './date/stamp',
-	'./data/ItemFileReadStore',
-	'./data/ItemFileWriteStore',
-	'./data/ObjectStore',
-	'./data/utils',
+	'./data',
 
 	 // host-specific tests
 	'intern/dojo/has!host-browser?./dom-form',
