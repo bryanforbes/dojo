@@ -15,18 +15,19 @@ define([
 						'dojo/dom-style',
 						'dojo/dom'
 					], function (domStyle, dom) {
-						try {
-							var node = dom.byId('node'),
-								style = domStyle.getComputedStyle(node);
-							assert.isNotNull(style);
-							node = document.createElement('div');
-							domStyle.set(node, 'nodeStyle');
-							s = domStyle.getComputedStyle(node);
-							assert.isNotNull(style);
-						} catch (err) {
-							assert.isTrue(false);
-						}
+						var node = dom.byId('node'),
+							initialStyle = domStyle.getComputedStyle(node);
+						// Create a new node and set it's style to a CSS class name,
+						// verifying its computed style is still retrieved
+						node = document.createElement('div');
+						domStyle.set(node, 'nodeStyle');
+						var classStyle = domStyle.getComputedStyle(node);
+						send(initialStyle, classStyle);
 					});
+				})
+				.then(function (initialStyle, classStyle) {
+					assert.isNotNull(initialStyle);
+					assert.isNotNull(classStyle);
 				});
 		}
 	});
