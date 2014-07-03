@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html dir="rtl">
+	<head>
+		<title>testing Core HTML/DOM/CSS/Style utils</title>
+		<style type="text/css">
+			@import "../../../../../resources/dojo.css";
+		</style>
+		<script type="text/javascript" data-dojo-config="isDebug: true" src="../../../../../dojo.js"></script>
+		<style type="text/css">
+			#rect100 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 100px;
+				top: 100px;
+				width: 100px;
+				height: 100px;
+				border: 0px;
+				padding: 0px;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			.iframeTest {
+				border: 5px solid black;
+			}
+		</style>
+	</head>
+	<body style="min-height:2000px;min-width:2000px;">
+		<h1>testing Core HTML/DOM/CSS/Style utils</h1>
+		<div id="rect100">
+			100px rect, abs, 
+			mouse point is at top-left after the test "eventClientXY"
+		</div>
+		<div id="rect_vert" style="padding:100px;visibility:hidden;"><input
+			disabled value="show vertical scrollbar" style="display:block;height:100%;"></div>
+		<div id="rect_horz" style="padding:100px;visibility:hidden;"><input
+			disabled value="show horizonal scrollbar" style="display:block;width:100%;"></div>
+		<br>
+		<script type="text/javascript" src="scrollingIframe.js"></script>
+		<div id="iframeContainer"></div>
+
+		<script type="text/javascript">
+			parent.window.rtlTestsDfd.resolve();
+		</script>
+	</body>
+</html>

@@ -1,8 +1,8 @@
 define([
 	'intern!object',
 	'intern/chai!assert',
-	'intern/dojo/dom-construct',
-	'intern/dojo/_base/array',
+	'dojo/dom-construct',
+	'dojo/_base/array',
 	'dojo'
 ], function (
 	registerSuite,
@@ -11,14 +11,12 @@ define([
 	arrayUtil,
 	dojo
 ) {
-
 	var _rootElement;
-
 
 	registerSuite({
 		name: 'dojo/_base/html/id',
 
-		beforeEach: function () {
+		setup: function () {
 			var testElements = domConstruct.toDom(
 				'<form name="foobar">' +
 					'<input type="text" name="baz" value="baz1">' +
@@ -54,7 +52,7 @@ define([
 			document.body.appendChild(_rootElement);
 		},
 
-		afterEach: function () {
+		teardown: function () {
 			domConstruct.destroy(_rootElement);
 		},
 

@@ -1,8 +1,8 @@
 define([
 	'intern!object',
 	'intern/chai!assert',
-	'intern/dojo/dom-construct',
-	'intern/dojo/_base/array',
+	'dojo/dom-construct',
+	'dojo/_base/array',
 	'dojo'
 ], function (
 	registerSuite,
@@ -11,9 +11,7 @@ define([
 	arrayUtil,
 	dojo
 ) {
-
 	var _rootElement;
-
 
 	registerSuite({
 		name: 'dojo/_base/html/element',
@@ -302,7 +300,6 @@ define([
 			assert.equal(n.childNodes[2].tagName.toLowerCase(), 'span');
 			assert.equal(n.childNodes[2].innerHTML, 'B');
 		}
-
 	});
 });
 
