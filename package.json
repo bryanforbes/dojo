@@ -1,36 +1,42 @@
 {
-	"name": "dojo",
-	"version":"1.10.0-pre",
-	"directories": {
-		"lib": "."
-	},
-	"devDependencies": {
-		"intern-geezer": "2.0.0",
-		"grunt": "0.4.2",
-		"http-proxy": "0.10.3",
-		"glob": "3.2.7",
-		"jsgi-node": "0.3.1",
-		"formidable": "1.0.14",
-		"when": "2.7.0",
-		"sinon": "1.10.2"
-	},
-	"main": "main",
-	"scripts": {
-		"test": "grunt test"
-	},
-	"description": "Dojo core is a powerful, lightweight library that makes common tasks quicker and easier. Animate elements, manipulate the DOM, and query with easy CSS syntax, all without sacrificing performance.",
-	"licenses": [
-		 {
-				 "type": "AFLv2.1",
-				 "url": "http://trac.dojotoolkit.org/browser/dojo/trunk/LICENSE#L43"
-		 },
-		 {
-				 "type": "BSD",
-				 "url": "http://trac.dojotoolkit.org/browser/dojo/trunk/LICENSE#L13"
-		 }
-	],
-	"bugs": "http://bugs.dojotoolkit.org/",
-	"keywords": ["JavaScript", "Dojo", "Toolkit"],
-	"homepage": "http://dojotoolkit.org/",
-	"dojoBuild": "dojo.profile.js"
+  "name": "dojo",
+  "version": "1.10.0-pre",
+  "directories": {
+    "lib": "."
+  },
+  "devDependencies": {
+    "formidable": "1.0.14",
+    "glob": "3.2.7",
+    "grunt": "0.4.2",
+    "http-proxy": "0.10.3",
+    "intern-geezer": "2.0.0",
+    "jsgi-node": "0.3.1",
+    "sinon": "1.10.2",
+	"istanbul": "0.2.11",
+	"source-map": "0.1.33",
+    "when": "2.7.0"
+  },
+  "main": "main",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "description": "Dojo core is a powerful, lightweight library that makes common tasks quicker and easier. Animate elements, manipulate the DOM, and query with easy CSS syntax, all without sacrificing performance.",
+  "licenses": [
+    {
+      "type": "AFLv2.1",
+      "url": "http://trac.dojotoolkit.org/browser/dojo/trunk/LICENSE#L43"
+    },
+    {
+      "type": "BSD",
+      "url": "http://trac.dojotoolkit.org/browser/dojo/trunk/LICENSE#L13"
+    }
+  ],
+  "bugs": "http://bugs.dojotoolkit.org/",
+  "keywords": [
+    "JavaScript",
+    "Dojo",
+    "Toolkit"
+  ],
+  "homepage": "http://dojotoolkit.org/",
+  "dojoBuild": "dojo.profile.js"
 }
