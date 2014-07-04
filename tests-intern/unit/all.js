@@ -14,6 +14,7 @@ define([
 	'./topic',
 	'./json',
 	'./currency',
+	'./aspect',
 	'./date',
 	// './date/locale',
 	// './date/stamp',
