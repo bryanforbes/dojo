@@ -1,4 +1,5 @@
 define([
+	'./dom-style',
 	'./behavior',
 	'./cookie',
 	'./on'/*,
