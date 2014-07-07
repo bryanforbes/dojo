@@ -19,6 +19,7 @@ define([
 	'./date',
 	// './date/locale',
 	// './date/stamp',
+	'./data',
 
 	 // host-specific tests
 	'intern/dojo/has!host-browser?./dom-form',
