@@ -27,5 +27,9 @@ define([
 	'intern/dojo/has!host-browser?./mouse',
 	'intern/dojo/has!host-node?./node',
 	'intern/dojo/has!host-browser?./require/require',
-	'intern/dojo/has!host-browser?./router'
+	'intern/dojo/has!host-browser?./router',
+	'intern/dojo/has!host-browser?./NodeList-data',
+	'intern/dojo/has!host-browser?./NodeList-fx',
+	'intern/dojo/has!host-browser?./NodeList-traverse',
+	'intern/dojo/has!host-browser?./NodeList-manipulate'
 ], function () {});
