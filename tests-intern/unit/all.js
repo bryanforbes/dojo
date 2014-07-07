@@ -17,6 +17,7 @@ define([
 	'./Stateful',
 	'./currency',
 	'./date',
+	'./cache',
 	// './date/locale',
 	// './date/stamp',
 
