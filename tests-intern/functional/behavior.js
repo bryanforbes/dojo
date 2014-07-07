@@ -1,16 +1,15 @@
 define([
 	'require',
 	'intern!object',
-	'intern/chai!assert'
-], function (require, registerSuite, assert) {
+	'intern/chai!assert',
+	'../support/ready'
+], function (require, registerSuite, assert, ready) {
 	/* global behavior, behaviorObject, applyCount, topicCount */
 	registerSuite({
 		name: 'dojo/behavior',
 
 		before: function () {
-			return this.get('remote')
-				.get(require.toUrl('./behavior.html'))
-				.waitForCondition('ready', 5000);
+			return ready(this.get('remote'), require.toUrl('./behavior.html'));
 		},
 
 		'.add': function () {
@@ -86,7 +85,7 @@ define([
 				.then(function (topicCount) {
 					assert.strictEqual(topicCount, 2);
 				})
-				.elementById('another')
+				.findById('another')
 					.click()
 				.end()
 				.execute(function () {
@@ -101,21 +100,24 @@ define([
 				.then(function (topicCount) {
 					assert.strictEqual(topicCount, 2);
 				})
-				.elementById('blah')
+				.findById('blah')
 					.click()
 				.end()
+				.sleep(500)
 				.execute(function () {
 					return topicCount;
 				})
 				.then(function (topicCount) {
 					assert.strictEqual(topicCount, 3);
 				})
-				.elementById('another')
+				.findById('another')
 					.click()
 				.end()
-				.elementById('blah')
+				.sleep(500)
+				.findById('blah')
 					.click()
 				.end()
+				.sleep(500)
 				.execute(function () {
 					return topicCount;
 				})

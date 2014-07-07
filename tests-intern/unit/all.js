@@ -1,18 +1,32 @@
 define([
 	'./_base',
 	'./AdapterRegistry',
+	'./colors',
 	'./io-query',
+	'./promise',
 	'./request',
-	'./store/Memory',
+	'./store',
 	'./string',
 	'./Deferred',
 	'./regexp',
 	'./when',
+	'./fx/easing',
+	'./on',
+	'./Evented',
+	'./topic',
+	'./json',
+	'./Stateful',
+	'./currency',
+	'./date',
+	// './date/locale',
+	// './date/stamp',
 
-	// host-specific tests
+	 // host-specific tests
 	'intern/dojo/has!host-browser?./dom-form',
 	'intern/dojo/has!host-browser?./hash',
 	'intern/dojo/has!host-browser?./io/iframe',
+	'intern/dojo/has!host-browser?./mouse',
 	'intern/dojo/has!host-node?./node',
+	'intern/dojo/has!host-browser?./require/require',
 	'intern/dojo/has!host-browser?./router'
-], function(){});
+], function () {});
