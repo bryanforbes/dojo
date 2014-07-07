@@ -7,6 +7,7 @@ define([
 	'./request',
 	'./store',
 	'./string',
+	'./Deferred',
 	'./regexp',
 	'./when',
 	'./fx/easing',
