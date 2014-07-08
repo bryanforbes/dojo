@@ -8,11 +8,13 @@ define([
 	'dojo/node!url',
 	'dojo/node!querystring',
 	'dojo/node!glob',
+	'dojo/node!path',
+	'dojo/node!fs',
 	'dojo/node!http-proxy',
 	'dojo/node!jsgi-node',
 	'dojo/node!jsgi-node/jsgi/node',
 	'dojo/node!formidable'
-], function (require, exports, when, callbacks, nodefn, http, url, qs, glob, httpProxy, jsgi, node, formidable) {
+], function (require, exports, when, callbacks, nodefn, http, url, qs, glob, path, fs, httpProxy, jsgi, node, formidable) {
 	var nodeWrapper = node.Node,
 		proxy = new httpProxy.RoutingProxy();
 
@@ -21,6 +23,46 @@ define([
 			require([dep], callback);
 		});
 	})(require);
+
+	var contentTypes = {
+		'': 'application/octet-stream',
+		'.css': 'text/css',
+		'.gif': 'image/gif',
+		'.html': 'text/html',
+		'.jpg': 'image/jpeg',
+		'.js': 'text/javascript',
+		'.json': 'application/json',
+		'.png': 'image/png'
+	};
+
+	function send404(response) {
+		response.writeHead(404, {
+			'Content-Type': 'text/html;charset=utf-8'
+		});
+		response.end('<!DOCTYPE html><title>404 Not Found</title><h1>404 Not Found</h1><!-- ' +
+			new Array(512).join('.') + ' -->');
+	}
+
+	function serveFile(request, response) {
+		var file = /^\/+([^?]*)/.exec(request.url)[1];
+		file = file.replace(/^__files\//, '');
+
+		var contentType = contentTypes[path.extname(file)] || contentTypes[''];
+
+		fs.stat(file, function (error, status) {
+			if (error) {
+				send404(response);
+				return;
+			}
+
+			response.writeHead(200, {
+				'Content-Type': contentType,
+				'Content-Length': status.size
+			});
+
+			fs.createReadStream(file).pipe(response);
+		});
+	}
 
 	function Multipart(nextApp) {
 		//	summary:
@@ -104,9 +146,13 @@ define([
 					}
 					return response;
 				}));
+
 			var server = http.createServer(function (request, response) {
 				if (request.url.indexOf('/__services/') === 0) {
 					servicesHandler(request, response);
+				}
+				else if (request.url.indexOf('/__files/') === 0) {
+					serveFile(request, response);
 				}
 				else {
 					proxy.proxyRequest(request, response, {
