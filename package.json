@@ -13,7 +13,9 @@
 		"formidable": "1.0.14",
 		"when": "2.7.0",
 		"sinon": "1.10.2",
-		"dojo": "1.10.0"
+		"dojo": "1.10.0",
+		"istanbul": "0.2.11",
+		"source-map": "0.1.33"
 	},
 	"main": "main",
 	"scripts": {
