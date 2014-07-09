@@ -19,6 +19,7 @@ define([
 	'./string',
 	'./topic',
 	'./when',
+	'./loadInit',
 
 	//  // host-specific tests
 	'dojo/has!host-browser?./dom-form',
