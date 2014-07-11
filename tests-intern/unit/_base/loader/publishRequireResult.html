@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>publish require result</title>
+		<script type="text/javascript">
+			var publishing = location.query !== '?do-not-publish';
+
+			if (!publishing) {
+				var dojoConfig = {
+					publishRequireResult: 0
+				}
+			}
+		</script>
+
+		<script type='text/javascript' src='../../../../dojo.js'></script>
+
+		<script type='text/javascript'>
+			parent.loaderTestDfd.resolve();
+		</script>
+	</head>
+	<body>
+		<h1>publish require result</h1>
+	</body>
+</html>
