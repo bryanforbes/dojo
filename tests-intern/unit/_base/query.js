@@ -135,7 +135,6 @@ define([
 			assert.strictEqual(2, (dojo.query('.subDiv .subP', 't4')).length);
 			assert.strictEqual(2, (dojo.query('.subDiv .subP .subA', 't4')).length);
 
-
 			// failed scope arg
 			assert.strictEqual(0, (dojo.query('*', 'thinger')).length);
 			assert.strictEqual(0, (dojo.query('div#foo').length));
