@@ -25,5 +25,6 @@ define([
 	'intern/dojo/has!host-browser?./mouse',
 	'intern/dojo/has!host-node?./node',
 	'intern/dojo/has!host-browser?./require/require',
-	'intern/dojo/has!host-browser?./router'
+	'intern/dojo/has!host-browser?./router',
+	'intern/dojo/has!host-browser?./parser'
 ], function () {});

@@ -1,0 +1,265 @@
+<h1>Parser Unit Test</h1>
+<div id=main>
+	<div dojo-testingType="tests.parser.Class1"
+		data-dojo-testing-id="obj"
+		strProp1="text"
+		strProp2=""
+		intProp="5"
+		arrProp="foo, bar, baz"
+		arrProp2=""
+		boolProp1="true" boolProp2="false"
+		dateProp1="2006-01-01" dateProp2="" dateProp3="now"
+		funcProp2="foo" funcProp3="this.func3Called=true;">
+		<script type="dojo/method" data-dojo-testing-event="preamble">
+			this.preambleTestProp = 3;
+		</script>
+		<script type="dojo/method">
+			// this should be run immediately
+			this.deepProp = deepTestProp;
+		</script>
+		<script type="dojo/connect" data-dojo-testing-event="callInc">
+			this.callCount++;
+		</script>
+		<script type="dojo/method" data-dojo-testing-event="callInc2">
+			this.callCount2++;
+		</script>
+	</div>
+	<div dojo-testingType="tests.parser.Class2" jsId="obj3"></div>
+	<div dojo-testingType="tests.parser.Class3" data-dojo-testing-id="obj4"></div>
+	<input dojo-testingType="tests.parser.InputClass" data-dojo-testing-id="checkedObj" checked type="checkbox">
+	<button dojo-testingType="tests.parser.InputClass" data-dojo-testing-id="disabledObj" disabled>hi</button>
+	<div id="parsertest"></div>
+	<div id="parsertest2"></div>
+	<div>
+		<div dojo-testingType="tests.parser.NormalContainer" data-dojo-testing-id="container1">
+			<script type="dojo/method" data-dojo-testing-event="incr" data-dojo-testing-args="x">
+				return x+1;
+			</script>
+			<div dojo-testingType="tests.parser.Class1" data-dojo-testing-id="contained1"></div>
+			<div>
+				<div dojo-testingType="tests.parser.Class1" data-dojo-testing-id="contained2"></div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<div dojo-testingType="tests.parser.ShieldedContainer" data-dojo-testing-id="container2">
+			<script type="dojo/method" data-dojo-testing-event="incr" data-dojo-testing-args="x">
+				return x + 1;
+			</script>
+			<div dojo-testingType="tests.parser.Class1" data-dojo-testing-id="contained3"></div>
+			<div>
+				<div dojo-testingType="tests.parser.Class1" data-dojo-testing-id="contained4"></div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<div data-dojo-testing-id="html5simple" data-dojo-testing-type="tests.parser.HTML5Props" data-dojo-testing-props="simple:true"></div>
+		<div data-dojo-testing-id="html5simple2" data-dojo-testing-type="tests.parser.HTML5Props"
+			data-dojo-testing-props="simple:false, a:1, b:'two', c:[1,2,3], d:function(){ return this; }, e:{ f:'g' }">
+		</div>
+		<div data-dojo-testing-id="html5simple3" data-dojo-testing-type="tests.parser.HTML5Props"
+			data-dojo-testing-props="afn: function(){ return this.inherited('afn', arguments); }">
+		</div>
+		<div data-dojo-testing-id="html5fromobjectns" data-dojo-testing-type="tests.parser.HTML5Props"
+			data-dojo-testing-obj="tests.parser.HTML5Props._aDefaultObj">
+		</div>
+		<div data-dojo-testing-id="html5fromobjectns2" data-dojo-testing-type="tests.parser.HTML5Props"
+			data-dojo-testing-obj="tests.parser.HTML5Props._aDefaultObj" data-dojo-testing-props="simple:false">
+		</div>
+	</div>
+	<div>
+		<div data-dojo-testing-id="htmldojomethod" data-dojo-testing-type="tests.parser.HTML5withMethod">
+			<p>Some random markup</p>
+			<script type="dojo/method" data-dojo-testing-event="someMethod" data-dojo-testing-args="a, b">
+				return this.baseValue + a + b;
+			</script>
+			<script type="dojo/connect" data-dojo-testing-event="diffMethod" data-dojo-testing-args="a">
+				this._fromvalue = a;
+			</script>
+			<script type="dojo/method">
+				this._methodRan = true;
+			</script>
+			<div data-dojo-testing-id="objAspect" data-dojo-testing-type="tests.parser.MethodClass">
+				<script type="dojo/aspect" data-dojo-testing-method="method1" data-dojo-testing-advice="after">
+					if(this.method1ran){
+						this.method1after = true;
+					}
+				</script>
+				<script type="dojo/aspect" data-dojo-testing-method="method2" data-dojo-testing-advice="around" data-dojo-testing-args="origFn">
+					return function(){
+						if(!this.method2ran){
+							this.method2before = true;
+						}
+						origFn.call(this);
+						if(this.method2ran){
+							this.method2after = true;
+						}
+					};
+				</script>
+				<script type="dojo/aspect" data-dojo-testing-method="method3" data-dojo-testing-advice="before" data-dojo-testing-args="result">
+					if(result == "something"){
+						return ["before"];
+					}
+				</script>
+				<script type="dojo/aspect" data-dojo-testing-method="method4">
+					if(this.method4ran){
+						this.method4after = true;
+					}
+				</script>
+			</div>
+		</div>
+	</div>
+	<div>
+		<div data-dojo-testing-id="objOnWatch" data-dojo-testing-type="tests.parser.StatefulClass">
+			<script type="dojo/watch" data-dojo-testing-prop="strProp1" data-dojo-testing-args="prop,oldValue,newValue">
+				this.set("arrProp",{prop: prop, oldValue: oldValue, newValue: newValue});
+			</script>
+			<script type="dojo/on" data-dojo-testing-event="click" data-dojo-testing-args="e">
+				this.set("boolProp1", true);
+			</script>
+		</div>
+	</div>
+	<div>
+		<div data-dojo-testing-id="objAMDWidget" data-dojo-testing-type="dojo/tests-intern/unit/parser/support/AMDWidget" data-dojo-testing-props="value: 'Value1'"></div>
+	</div>
+</div>
+<div id="on">
+	<form action="/SomeUrl" data-dojo-testing-type="tests.parser.StatefulClass" data-dojo-testing-id="onForm">
+		<input data-dojo-testing-type="tests.parser.InputClass" name="ACheckBox" />
+		<script type="dojo/on" data-dojo-testing-event="click">
+			this.clicked = true;
+		</script>
+	</form>
+</div>
+<div>
+	<div data-dojo-testing-type="tests.parser.Class1" data-dojo-testing-id="obj2" id="toParse"></div>
+</div>
+<div id="dirSection1">
+	<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="setRtl" dir="rtl" name="RTL setting"></div>
+	<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="noDir" name="dir not inherited or set"></div>
+</div>
+<div id="dirSection2" dir="rtl">
+	<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="inheritRtl" name="inherited RTL from parent"></div>
+	<div dir="ltr">
+		<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="inheritLtr" name="inherited LTR from parent"></div>
+	</div>
+	<div>
+		<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="inheritRtl2" name="inherited RTL from grandparent"></div>
+	</div>
+	<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="setLtr" dir="ltr" name="LTR setting overrides inherited RTL"></div>
+</div>
+<div id="langSection">
+	<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="noLang" name="shouldn't get lang"></div>
+	<div lang="it_it">
+		<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="inheritedLang" name="inherited lang from parent"></div>
+		<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="specifiedLang" lang="en_us" name="specified lang overrides parent"></div>
+	</div>
+</div>
+<div id="textDirSection">
+	<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="noTextdir" name="shouldn't get textdir"></div>
+	<div data-dojo-testing-textdir="rtl">
+		<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="inheritedTextdir" name="inherited textdir from parent"></div>
+		<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="specifiedTextdir" data-dojo-testing-textdir="ltr" name="specified textdir overrides parent"></div>
+	</div>
+</div>
+<div id="bidiInheritanceFromHtml">
+	<div dojo-testingType="tests.parser.BidiClass" data-dojo-testing-id="inheritedFromHtml" name="should get dir/lang/textDir from HTML tag"></div>
+</div>
+<div id=ie>
+	<input id="ieInput1" data-dojo-testing-type="tests.parser.InputClass"
+		type=checkbox disabled foo = 'bar' readonly bar=zaz bob='escaped"dq' frank="escaped'sq" checked />
+	<input id="ieInput2" data-dojo-testing-type="tests.parser.InputClass"
+		fakeout1="type=submit" fakeout2="name='test'" fakeout3="value='123'" data-dojo-testing-props="foo: 'hi'"/>
+	<input id="ieInput3" data-dojo-testing-type="tests.parser.InputClass"
+		type=password name="test" value="123" class="myClass" style="display:block" tabindex="3"/>
+	<textarea id="ieTextarea" data-dojo-testing-type="tests.parser.InputClass" value="attrVal">contentVal</textarea>
+	<button id="ieButton1" data-dojo-testing-type="tests.parser.InputClass" checked value="button1val">
+		checked ToggleButton as button
+	</button>
+	<button id="ieButton2" data-dojo-testing-type="tests.parser.InputClass">
+		unchecked ToggleButton as button
+	</button>
+	<div id="ieButton3" data-dojo-testing-type="tests.parser.InputClass" checked>
+		checked ToggleButton as div
+	</div>
+	<div id="ieButton4" data-dojo-testing-type="tests.parser.InputClass">
+		unchecked ToggleButton as div
+	</div>
+	<form id="ieForm1" data-dojo-testing-type="tests.parser.FormClass" encType="foo"></form>
+	<form id="ieForm2" data-dojo-testing-type="tests.parser.FormClass"></form>
+	<ul dojo-testingType="tests.parser.Widget" class="nav">
+		<li id="li" dojo-testingType="tests.parser.Widget" value="home">Home</li>
+		<li dojo-testingType="tests.parser.Widget" value="contact">Contact</li>
+		<li dojo-testingType="tests.parser.Widget" value="group">Group</li>
+		<li dojo-testingType="tests.parser.Widget" value="campaign">Campaign</li>
+	</ul>
+</div>
+<div id="mixedContainer">
+	<input data-dojo-testing-type="tests.parser.InputClass" data-dojo-testing-id="mixedObj"
+		value="mixedValue" title="native title" data-dojo-testing-props="custom1: 999, title: 'custom title'">
+</div>
+<div id="functions">
+	<button dojo-testingType="tests.parser.Button" onClick="buttonClicked" data-dojo-testing-id="button">Click me</button>
+</div>
+<div id="instantiate1">
+	<div dojo-testingType="tests.parser.Class1" data-dojo-testing-id="objI1" id="objId1"
+		strProp1="text" strProp2=""
+		intProp="5"
+		arrProp="foo, bar, baz"
+		arrProp2=""
+		boolProp1="true" boolProp2="false"
+		dateProp1="2006-01-01" dateProp2="" dateProp3="now"
+		funcProp2="foo" funcProp3="this.func3Called=true;">
+	</div>
+	<div data-dojo-testing-type="tests.parser.Class1" data-dojo-testing-id="objI2" id="objId2"
+		data-dojo-testing-props="
+		strProp1:'text',
+		strProp2:'',
+		intProp:5,
+		arrProp:['foo', 'bar', 'baz'],
+		arrProp2:[],
+		boolProp1:true,
+		boolProp2:'false',
+		dateProp1:'2006-01-01',
+		dateProp2:'',
+		dateProp3:'now',
+		funcProp3:'this.func3Called=true;'">
+	</div>
+	<div dojo-testingType="tests.parser.NormalContainer" data-dojo-testing-id="contI1" id ="contId1">
+		<div dojo-testingType="tests.parser.Class1" data-dojo-testing-id="objI3" id="objId3"></div>
+		<div dojo-testingType="tests.parser.Class1" data-dojo-testing-id="objI4" id="objId4"></div>
+	</div>
+</div>
+<div id="construct1">
+	<div data-dojo-testing-id="objC1" id="objC1"
+		strProp1="text" strProp2=""
+		intProp="5"
+		arrProp="foo, bar, baz"
+		arrProp2=""
+		boolProp1="true" boolProp2="false"
+		dateProp1="2006-01-01" dateProp2="" dateProp3="now"
+		funcProp2="foo" funcProp3="this.func3Called=true;">
+	</div>
+	<div data-dojo-testing-id="objC2" id="objC2"
+		data-dojo-testing-props="
+		strProp1:'text',
+		strProp2:'',
+		intProp:5,
+		arrProp:['foo', 'bar', 'baz'],
+		arrProp2:[],
+		boolProp1:true,
+		boolProp2:'false',
+		dateProp1:'2006-01-01',
+		dateProp2:'',
+		dateProp3:'now',
+		funcProp3:'this.func3Called=true;'">
+	</div>
+</div>
+
+<div id="behavioral">
+	<div data-dojo-testing-type="Behavioral1" onClick="behavioralClickCounter++;" id="bh1" foo="bar">click me</div>
+</div>
+<div id="errorHandling">
+	<div data-dojo-testing-type="dojo/tests-intern/unit/parser/support/AMDWidget" data-dojo-testing-props="foo: 'bar'"></div>
+</div>
+<div id="missingCtor"></div>

@@ -1,0 +1,21 @@
+<h1>parseOnLoad:true, async: true, auto-require unit test</h1>
+
+<p>This page tests that:</p>
+<ol>
+	<li>parseOnLoad: true parses the page on load</li>
+	<li>auto-require of modules</li>
+	<li>the parse happens before the ready() callback happens, including loading of auto-required modules</li>
+</ol>
+<p>See console for test results.</p>
+
+<div data-dojo-testing-id="dr1"
+	data-dojo-testing-type="dojo/tests-intern/unit/parser/support/AMDWidget"
+	data-dojo-testing-props="foo: 'bar'"></div>
+
+<div data-dojo-testing-id="dr2"
+	data-dojo-testing-type="dojo/tests-intern/unit/parser/support/AMDWidget2"
+	data-dojo-testing-props="foo: 'bar'"></div>
+	
+<div data-dojo-testing-id="dr3"
+	data-dojo-testing-type="dojo/tests-intern/unit/parser/support/AMDWidget3"
+	data-dojo-testing-props="foo: 'bar'"></div>
