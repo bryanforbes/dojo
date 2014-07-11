@@ -4,6 +4,6 @@ define([
 	'./_base/connect',
 	'./_base/declare',
 	'./_base/lang',
-	'./_base/sniff',
+	'dojo/has!host-browser?./_base/sniff',
 	'dojo/has!host-browser?./_base/xhr'
 ], function () {});
