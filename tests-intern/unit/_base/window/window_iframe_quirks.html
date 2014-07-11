@@ -1,0 +1,11 @@
+<html>
+	<body onload="parent.windowQuirksDfd.resolve();">
+		Quirks mode frame
+		<script type="text/javascript">
+			var answer = 42;
+			var div = document.createElement('div');
+			div.innerHTML = 'appVersion: ' + navigator.appVersion + '<br>compatMode: ' + document.compatMode;
+			document.body.appendChild(div);
+		</script>
+	</body>
+</html>
