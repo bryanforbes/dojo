@@ -20,12 +20,13 @@ define([
 	'./topic',
 	'./when',
 
-	//  // host-specific tests
+	// host-specific tests
 	'dojo/has!host-browser?./dom-form',
 	'dojo/has!host-browser?./hash',
 	'dojo/has!host-browser?./io/iframe',
 	'dojo/has!host-browser?./mouse',
 	'dojo/has!host-node?./node',
+	'dojo/has!host-browser?./query',
 	'dojo/has!host-browser?./require/require',
 	'dojo/has!host-browser?./router'
 ], function () {});
