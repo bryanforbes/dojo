@@ -69,5 +69,7 @@ define({
 	functionalSuites: [ 'base/tests-intern/functional/all' ],
 
 	// A regular expression matching URLs to files that should not be included in code coverage analysis
-	excludeInstrumentation: /^(?:node_modules|tests-intern|tests)\//
+	// excludeInstrumentation: /^(?:node_modules|tests-intern|tests)\//
+	// TODO: restore instrumentation when __files prefix is supported by test proxy.
+	excludeInstrumentation: /./
 });

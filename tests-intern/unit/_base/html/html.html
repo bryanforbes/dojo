@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+We use a strict-mode DTD to ensure that the box model is the same for these
+basic tests
+-->
+<html>
+	<head>
+		<title>testing Core HTML/DOM/CSS/Style utils</title>
+		<style type="text/css">
+			@import "../../../../resources/dojo.css";
+		</style>
+		<script type="text/javascript" src="../../../../dojo.js" data-dojo-config="isDebug:true"></script>
+		<style type="text/css">
+			html, body {
+				padding: 0px;
+				margin: 0px;
+				border: 0px;
+			}
+
+			#sq100 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 100px;
+				top: 100px;
+				width: 100px;
+				height: 100px;
+				border: 0px;
+				padding: 0px;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#sq100margin10 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 250px;
+				top: 100px;
+				width: 100px;
+				height: 100px;
+				border: 0px;
+				padding: 0px;
+				margin: 10px;
+				overflow: hidden;
+			}
+
+			#sq100margin10pad10 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 400px;
+				top: 100px;
+				width: 100px;
+				height: 100px;
+				border: 0px;
+				padding: 10px;
+				margin: 10px;
+				overflow: hidden;
+			}
+
+			#sq100pad10 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 100px;
+				top: 250px;
+				width: 100px;
+				height: 100px;
+				border: 0px;
+				padding: 10px;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#sq100ltpad10 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 250px;
+				top: 250px;
+				width: 100px;
+				height: 100px;
+				border: 0px;
+				padding-left: 10px;
+				padding-top: 10px;
+				padding-right: 0px;
+				padding-bottom: 0px;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#sq100ltpad10rbmargin10 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 400px;
+				top: 250px;
+				width: 100px;
+				height: 100px;
+				border: 0px;
+				padding-left: 10px;
+				padding-top: 10px;
+				padding-right: 0px;
+				padding-bottom: 0px;
+				margin-left: 0px;
+				margin-top: 0px;
+				margin-right: 10px;
+				margin-bottom: 10px;
+				overflow: hidden;
+			}
+
+			#sq100border10 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 100px;
+				top: 400px;
+				width: 100px;
+				height: 100px;
+				border: 10px solid yellow;
+				padding: 0px;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#sq100border10margin10 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 250px;
+				top: 400px;
+				width: 100px;
+				height: 100px;
+				border: 10px solid yellow;
+				padding: 0px;
+				margin: 10px;
+				overflow: hidden;
+			}
+
+			#sq100border10margin10pad10 {
+				background-color: black;
+				color: white;
+				position: absolute;
+				left: 400px;
+				top: 400px;
+				width: 100px;
+				height: 100px;
+				border: 10px solid yellow;
+				padding: 10px;
+				margin: 10px;
+				overflow: hidden;
+			}
+
+			#sq100nopos {
+				background-color: black;
+				color: white;
+				width: 100px;
+				height: 100px;
+				padding: 0px;
+				margin: 0px;
+			}
+
+			#scrollingStrictIframe,
+			#scrollingQuirksIframe {
+				border: 10px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>testing Core HTML/DOM/CSS/Style utils</h1>
+		<div id="sq100">
+			100px square, abs
+		</div>
+		<div id="sq100margin10">
+			100px square, abs, 10px margin
+		</div>
+		<div id="sq100margin10pad10">
+			100px square, abs, 10px margin, 10px padding
+		</div>
+		<div id="sq100pad10">
+			100px square, abs, 10px padding
+		</div>
+		<div id="sq100ltpad10">
+			100px square, abs, 10px left and top padding
+		</div>
+		<div id="sq100ltpad10rbmargin10">
+			100px square, abs, 10px left and top padding, 10px bottom and right margin
+		</div>
+		<div id="sq100border10">
+			100px square, abs, 10px yellow border
+		</div>
+		<div id="sq100border10margin10">
+			100px square, abs, 10px yellow border, 10px margin
+		</div>
+		<div id="sq100border10margin10pad10">
+			100px square, abs, 10px yellow border, 10px margin, 10px padding
+		</div>
+		<div id="sq100nopos">
+			100px square, no positioning
+		</div>
+
+		<iframe id="blah" name="blah"
+			src="javascript:'&lt;html&gt&lt;body&gt;&lt;div id=subDiv&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;'"></iframe>
+
+		<script type="text/javascript">
+		var reloaded = false;
+		function iframe10095loaded() {
+			require(["dojo", "dojo/domReady!"], function(dojo) {
+				var iframeWin = dojo.byId('10095_iframe').win;
+				dojo.withGlobal(iframeWin, function(){ dojo.destroy(dojo.byId('10095_textbox')) });
+				if(!reloaded){
+					reloaded = true;
+					dojo.byId('10095_iframe').src=iframeWin.frameElement.src;
+				}
+			});
+		}
+		</script>
+		<iframe id="10095_iframe" style="display:none;"
+			src="javascript:'&lt;html&gt;&lt;head&gt;&lt;script&gt;frameElement.win=window&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;input id=10095_textbox&gt;&lt;/body&gt;&lt;/html&gt;'" onload="iframe10095loaded()"></iframe>
+
+		<div id='iframe_div' style="position:absolute;top:0;left:500px;">
+			<iframe src="absStrictIframe.html" name="iframe_strict" id="iframe_strict"
+				style="border:3px solid black; padding:4px; margin:5px; background-color:black;"
+				scrolling=yes allowtransparency=true></iframe>
+			<iframe src="absQuirksIframe.html" name="iframe_quirks" id="iframe_quirks"
+				style="border:3px solid black; padding:4px; margin:5px; background-color:black;"
+				scrolling=yes allowtransparency=true></iframe>
+		</div>
+
+		<div id="div-no-tabindex"></div>
+		<div id="div-tabindex-minus-1" tabIndex="-1"></div>
+		<div id="div-tabindex-0" tabIndex="0"></div>
+		<div id="div-tabindex-1" tabIndex="1"></div>
+
+		<div>
+			<input id="input-no-type">
+			<input id="input-with-type" type="checkbox">
+			<input id="input-no-tabindex">
+			<input id="input-tabindex-minus-1" tabIndex="-1">
+			<input id="input-tabindex-0" tabIndex="0">
+			<input id="input-tabindex-1" tabIndex="1">
+			<input id="input-text-value" type="text" value="123">
+			<input id="input-no-disabled" type="text">
+			<input id="input-with-disabled" type="text" disabled>
+			<input id="input-with-disabled-true" disabled="disabled">
+		</div>
+		<div>
+			<label id="label-no-for">label with no for </label><input type="text" id="label-test-input">
+			<label id="label-with-for" for="input-with-label">label with for </label><input type="text" id="input-with-label">
+		</div>
+
+		<div id="iframeContainer"></div>
+
+		<!-- SVG element to test dojo.getComputedStyle on IE9 (#14103) -->
+		<!-- SVG element to test empty -->
+		<svg id="surface" xmlns="http://www.w3.org/2000/svg" width="100px" height="100px"
+			><rect id="rect1" fill="rgb(255, 0, 0)" x="0" y="0" width="80" height="60" ry="0" rx="0" fill-rule="evenodd"
+		/></svg>
+
+		<!-- OBJECT element to test empty -->
+		<object width="500" height="500" id="objectToEmpty" data="data:application/x-silverlight," type="application/x-silverlight"
+			><param name="background" value="transparent"
+		/></object>
+
+		<!-- IFRAME element to test destroy -->
+		<iframe id="iframeToDestroy" src="about:blank"
+			><span></span
+		></iframe>
+
+		<!-- DIV element to test destroy of element not in the DOM -->
+		<div id="divToRemoveFromDOM"
+			><div id="divToDestroy"></div
+			><div></div
+		></div>
+
+		<script type="text/javascript">
+			parent.window.htmlTestsDfd.resolve();
+		</script>
+	</body>
+</html>

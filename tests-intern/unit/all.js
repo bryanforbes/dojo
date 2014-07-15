@@ -20,7 +20,7 @@ define([
 	'./topic',
 	'./when',
 
-	//  // host-specific tests
+	// host-specific tests
 	'dojo/has!host-browser?./dom-form',
 	'dojo/has!host-browser?./hash',
 	'dojo/has!host-browser?./io/iframe',
