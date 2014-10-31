@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>require.js: urlFetch Mapping Test</title>
+    <script type="text/javascript">
+        var testArgs = { async: 0 };
+        requirejsArgs = {
+            dojoLocation: '../../../../../..'
+        };
+    </script>
+    <script type="text/javascript" src="../requirejs-setup.js"></script>
+    <script type="text/javascript" src="../../../../../../dojo.js"></script>
+</head>
+<body>
+<h1>require.js: urlFetch Mapping Test</h1>
+
+<p>Make sure that multiple modules mapped to the same URL only get
+    the URL fetched once.</p>
+
+<p>Check console for messages</p>
+<script>
+    function callback(data) {
+     console.log(data);
+    }
+    require({
+        baseUrl: './',
+        paths: {
+            'one' : 'two',
+            'two' : 'two',
+            'three': 'three',
+            'four': 'three'
+        }
+    }, [ 'one', 'two', 'three', 'four' ], function(one, two, three, four) {
+        var scripts = document.getElementsByTagName('script');
+        var counts = {};
+        var url;
+
+        //First confirm there is only one script tag for each module
+        for (var i = scripts.length - 1; i > -1; i--) {
+            url = scripts[i].src;
+            if (url) {
+                if (!(url in counts)) {
+                    counts[url] = 0;
+                }
+                counts[url] += 1;
+            }
+        }
+
+        var data = {
+            oneName: one.name,
+            twoOneName: two.oneName,
+            twoName: two.name,
+            threeName: three.name,
+            fourThreeName: four.threeName,
+            fourName: four.name
+        };
+        if (require.async) {
+            data.counts = [];
+            for (var prop in counts) {
+                data.counts.push(counts[prop]);
+            }
+        }
+        callback(data);
+    });
+</script>
+</body>
+</html>
