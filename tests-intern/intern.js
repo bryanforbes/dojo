@@ -39,7 +39,7 @@ define({
 	// OnDemand. Options that will be permutated are browserName, version, platform, and platformVersion; any other
 	// capabilities options specified for an environment will be copied as-is
 	environments: [
-		{ browserName: 'internet explorer', version: '11', platform: 'Windows 8.1', 'prerun': 'http://localhost:9001/tests-intern/support/prerun.bat' },
+		{ browserName: 'internet explorer', version: '11', platform: 'Windows 8.1', nativeEvents: false, 'prerun': 'http://localhost:9001/tests-intern/support/prerun.bat' },
 		{ browserName: 'internet explorer', version: '10', platform: 'Windows 8', 'prerun': 'http://localhost:9001/tests-intern/support/prerun.bat' },
 		{ browserName: 'internet explorer', version: [ '9', '10' ], platform: 'Windows 7', 'prerun': 'http://localhost:9001/tests-intern/support/prerun.bat' },
 		{ browserName: 'internet explorer', version: '8', platform: 'Windows 7', nativeEvents: false, 'prerun': 'http://localhost:9001/tests-intern/support/prerun.bat' },
