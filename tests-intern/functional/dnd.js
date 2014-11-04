@@ -84,10 +84,10 @@ define([
 
 		'custom avatar': function () {
 			return getTestPage()
-				// set the context to the first div in c1
+				// set the context to the first div in c3
 				.findAllByCssSelector('#c3 > div')
 				.then(function (elements, setContext) {
-					setContext(elements[1]);
+					setContext(elements[0]);
 				})
 				// click the div
 				.moveMouseTo()
