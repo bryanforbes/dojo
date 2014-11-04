@@ -4,7 +4,21 @@
 	"directories": {
 		"lib": "."
 	},
+	"devDependencies": {
+		"intern-geezer": "2.1.1",
+		"grunt": "0.4.2",
+		"http-proxy": "0.10.3",
+		"glob": "3.2.7",
+		"jsgi-node": "0.3.1",
+		"formidable": "1.0.14",
+		"when": "2.7.0",
+		"sinon": "git://github.com/cjohansen/Sinon.JS.git#a0f39ebd584080447fdf473fe4b47e89c00aecf7",
+		"dojo": "1.10.0"
+	},
 	"main": "main",
+	"scripts": {
+		"test": "grunt test"
+	},
 	"description": "Dojo core is a powerful, lightweight library that makes common tasks quicker and easier. Animate elements, manipulate the DOM, and query with easy CSS syntax, all without sacrificing performance.",
 	"licenses": [
 		 {
