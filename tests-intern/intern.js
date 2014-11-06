@@ -95,10 +95,11 @@ define({
 	},
 
 	// Non-functional test suite(s) to run in each browser
-	suites: [ 'testing/tests-intern/unit/all' ],
+	// suites: [ 'testing/tests-intern/unit/all' ],
+	suites: [ 'testing/tests-intern/unit/parser' ],
 
 	// Functional test suite(s) to run in each browser once non-functional tests are completed
-	functionalSuites: [ 'testing/tests-intern/functional/all' ],
+	// functionalSuites: [ 'testing/tests-intern/functional/all' ],
 
 	// A regular expression matching URLs to files that should not be included in code coverage analysis
 	excludeInstrumentation: /^(?:node_modules|tests-intern|tests)\//
