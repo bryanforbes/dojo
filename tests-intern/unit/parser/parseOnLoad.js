@@ -1,27 +1,21 @@
+// jshint maxlen: 160
 define([
 	'intern!object',
 	'intern/chai!assert',
 	'../../../parser',
-	'../../../_base/kernel',
 	'dojo/dom-construct',
 	'dojo/_base/window',
-	'dojo/string'
-], function (registerSuite, assert, parser, dojo, domConstruct, win, string) {
+	'./support/util'
+], function (registerSuite, assert, parser, domConstruct, win, util) {
 	/*globals dr1, dr2, dr3, dr4, dr5*/
 	var container;
-
-	function fixScope(snippet) {
-		return string.substitute(snippet, {
-			dojo: dojo._scopeName
-		});
-	}
 
 	registerSuite({
 		name: 'parser auto-require',
 
 		setup: function () {
 			container = domConstruct.place(
-				fixScope('<div id="main">' +
+				util.fixScope('<div id="main">' +
 					'<div data-${dojo}-id="dr1" data-${dojo}-type="dojo/tests/resources/AMDWidget" data-${dojo}-props="foo: \'bar\'"></div>' +
 					'<div data-${dojo}-id="dr2" data-${dojo}-type="dojo/tests/resources/AMDWidget2" data-${dojo}-props="foo: \'bar\'"></div>' +
 					'<div data-${dojo}-id="dr3" data-${dojo}-type="dojo/tests/resources/AMDWidget3" data-${dojo}-props="foo: \'bar\'"></div>' +
@@ -50,7 +44,7 @@ define([
 
 		setup: function () {
 			container = domConstruct.place(
-				fixScope('<div id="main">' +
+				util.fixScope('<div id="main">' +
 					'<script type="dojo/require">' +
 						'AMDWidget: "${dojo}/tests-intern/resources/AMDWidget",' +
 						'AMDWidget2: "${dojo}/tests-intern/resources/AMDWidget2"' +

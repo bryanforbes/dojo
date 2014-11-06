@@ -2,13 +2,13 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'../../../parser',
-	'../../../_base/kernel',
 	'dojo/Deferred',
 	'dojo/_base/declare',
 	'dojo/dom-construct',
 	'dojo/_base/window',
-	'dojo/_base/array'
-], function (registerSuite, assert, parser, dojo, Deferred, declare, domConstruct, win, array) {
+	'dojo/_base/array',
+	'./support/util'
+], function (registerSuite, assert, parser, Deferred, declare, domConstruct, win, array, util) {
 	/*globals asyncWidget, syncWidget*/
 
 	var finishCreatingAsyncWidgets = new Deferred(),
@@ -41,10 +41,10 @@ define([
 
 		setup: function () {
 			container = domConstruct.place(
-				'<div id=main>' +
-					'<span data-' + dojo._scopeName + '-id="asyncWidget" data-' + dojo._scopeName + '-type="AsyncWidget">hi</span>' +
-					'<span data-' + dojo._scopeName + '-id="syncWidget" data-' + dojo._scopeName + '-type="SyncWidget">there</span>' +
-				'</div>', win.body());
+				util.fixScope('<div id=main>' +
+					'<span data-${dojo}-id="asyncWidget" data-${dojo}-type="AsyncWidget">hi</span>' +
+					'<span data-${dojo}-id="syncWidget" data-${dojo}-type="SyncWidget">there</span>' +
+				'</div>'), win.body());
 		},
 
 		teardown: function () {
@@ -63,7 +63,8 @@ define([
 
 			parsePromise.then(d.callback(function (list) {
 				assert.isTrue(asyncWidget._started);
-				assert.strictEqual('AsyncWidget, SyncWidget', array.map(list, function (cls) { return cls.declaredClass; }).join(', '));
+				assert.strictEqual('AsyncWidget, SyncWidget',
+					array.map(list, function (cls) { return cls.declaredClass; }).join(', '));
 			}));
 		}
 	});
