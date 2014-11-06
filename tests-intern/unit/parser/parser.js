@@ -334,16 +334,15 @@ define([
 			// widget constructor, especially 'toString' or 'constructor'.
 			// Make exception for dir/lang which parser gleans from document itself.
 			//
-			// TODO: file a bug about testingtype being left in the params
-			// dojo/parser.js line 282 should assign "dojotype" instead
-			// of "dojoType"; this allows testingtype to be left into
-			// the params
+			// TODO: File a bug about ${scope}[Tt]ype being left in the params in
+			// dojo/parser.js. Line 282 in parser.js should alias "dojotype", rather
+			// than "dojoType", to "${scope}type"; this would prevent ${scope}[Tt]ype
+			// from ending up in the object params.
 			for (var param in obj.params) {
 				assert.ok(array.indexOf(
 					['strProp1', 'strProp2',
-						// TODO: as soon as parser is fixed, remove the
-						// next line:
-						util.fixScope('${dojo}type'),
+						// TODO: as soon as parser is fixed, remove the next line:
+						util.fixScope('${dojo}Type'),
 						'intProp',
 						'arrProp', 'arrProp2',
 						'boolProp1', 'boolProp2',
