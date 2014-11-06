@@ -1,10 +1,9 @@
 define([
 	'require',
 	'intern!object',
-	'intern/chai!assert'
+	'intern/chai!assert',
 ], function (require, registerSuite, assert) {
 	/*jshint -W020 */
-	/* global moveEvents, downEvents */
 	registerSuite({
 		name: 'mouseenter/mouseleave',
 
@@ -21,9 +20,6 @@ define([
 
 		'enter middle': function () {
 			return this.get('remote')
-				.execute(function () {
-					moveEvents = [];
-				})
 				.elementById('outer')
 					.moveTo(1, 1)
 				.end()
@@ -32,36 +28,34 @@ define([
 					.moveTo(1, 1)
 				.end()
 				.execute(function () {
-					return moveEvents;
+					var input = dojo.byId('event-target-input');
+
+					return input.value;
 				})
-				.then(function (moveEvents) {
-					assert.strictEqual(1, moveEvents.length, 'one event');
-					assert.strictEqual('mouseenter', moveEvents[0].event, 'mouse enter event');
-					assert.strictEqual('outer', moveEvents[0].target, 'mouse enter target');
-				});
+				.then(function (value) {
+					assert.strictEqual('mouseenter_outer', value, 'input text matches event');
+				})
+				.end();
 		},
 
 		'enter inner1': function () {
 			return this.get('remote')
-				.execute(function () {
-					moveEvents = [];
-				})
 				.elementById('inner1')
 					.moveTo(1, 1)
 				.end()
+				.wait(1000)
 				.execute(function () {
-					return moveEvents;
+					var input = dojo.byId('event-target-input');
+
+					return input.value;
 				})
-				.then(function (moveEvents) {
-					assert.strictEqual(0, moveEvents.length, 'no events');
+				.then(function (value) {
+					assert.strictEqual('mouseenter_outer', value, 'input text matches event');
 				});
 		},
 
 		'after outer': function () {
 			return this.get('remote')
-				.execute(function () {
-					moveEvents = [];
-				})
 				.elementById('outer')
 					.moveTo(1, 1)
 				.end()
@@ -70,12 +64,12 @@ define([
 					.moveTo(1, 1)
 				.end()
 				.execute(function () {
-					return moveEvents;
+					var input = dojo.byId('event-target-input');
+
+					return input.value;
 				})
-				.then(function (moveEvents) {
-					assert.strictEqual(1, moveEvents.length, 'one event');
-					assert.strictEqual('mouseleave', moveEvents[0].event, 'mouse leave event');
-					assert.strictEqual('outer', moveEvents[0].target, 'mouse leave target');
+				.then(function (value) {
+					assert.strictEqual('mouseleave_outer', value, 'input text matches event');
 				});
 		}
 	});
@@ -83,53 +77,49 @@ define([
 	registerSuite({
 		name: 'mousedown, stopEvent',
 
+		'before': function () {
+			return this.get('remote')
+				.setAsyncScriptTimeout(5000)
+				.waitForConditionInBrowser('ready')
+				.elementById('header')
+					.moveTo(1, 1)
+				.end()
+				.click();
+		},
+
 		'mousedown inner1 div': function () {
 			return this.get('remote')
-				.execute(function () {
-					downEvents = [];
-				})
 				.elementById('inner1')
 					.moveTo(1, 1)
 				.end()
 				.click()
 				.execute(function () {
-					return downEvents;
+					var targetInput = dojo.byId('event-target-input'),
+						currentTargetInput = dojo.byId('event-current-target-input');
+
+					return [targetInput.value, currentTargetInput.value];
 				})
-				.then(function (downEvents) {
-					assert.strictEqual(2, downEvents.length, 'two mousedown events');
-					assert.strictEqual('mousedown', downEvents[0].event, 'downEvents[0].event');
-					assert.strictEqual('inner1', downEvents[0].target, 'downEvents[0].target');
-					assert.isTrue(downEvents[0].isLeft, 'downEvents[0].isLeft');
-					assert.isFalse(downEvents[0].isRight, 'downEvents[0].isRight');
-					assert.strictEqual('mousedown', downEvents[1].event, 'downEvents[1].event');
-					assert.strictEqual('middle', downEvents[1].currentTarget, 'downEvents[1].currentTarget');
-					assert.strictEqual('inner1', downEvents[1].target, 'downEvents[1].target');
-					assert.isTrue(downEvents[1].isLeft, 'downEvents[1].isLeft');
-					assert.isFalse(downEvents[1].isRight, 'downEvents[1].isRight');
+				.then(function (arr) {
+					assert.strictEqual('onclick_inner1', arr[0], 'input text matches event');
+					assert.strictEqual('onclick_middle', arr[1], 'input text matches event');
 				});
 		},
 
 		'mousedown outer div': function () {
 			return this.get('remote')
-				.execute(function () {
-					downEvents = [];
-				})
 				.elementById('outerLabel')
 					.moveTo(1, 1)
 				.end()
 				.click()
 				.execute(function () {
-					return downEvents;
-				})
-				.then(function (downEvents) {
-					assert.strictEqual(1, downEvents.length, 'one event');
-					assert.strictEqual('mousedown', downEvents[0].event, 'mousedown event');
-					assert.strictEqual('outerLabel', downEvents[0].target, 'mousedown target');
-					assert.strictEqual('outer', downEvents[0].currentTarget, 'mousedown current target');
+					var targetInput = dojo.byId('event-target-input'),
+						currentTargetInput = dojo.byId('event-current-target-input');
 
-					// TODO: Selenium isn't getting the button number
-					//assert.isFalse(downEvents[0].isLeft, 'downEvents[0].isLeft');
-					//assert.isTrue(downEvents[0].isMiddle, 'downEvents[0].isMiddle');
+					return [targetInput.value, currentTargetInput.value];
+				})
+				.then(function (arr) {
+					assert.strictEqual('onclick_outerLabel', arr[0], 'one event');
+					assert.strictEqual('onclick_outer', arr[1], 'one event');
 				});
 		}
 	});
