@@ -2,11 +2,11 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'../../../parser',
-	'../../../_base/kernel',
 	'dojo/_base/declare',
 	'dojo/dom-construct',
-	'dojo/_base/window'
-], function (registerSuite, assert, parser, dojo, declare, domConstruct, win) {
+	'dojo/_base/window',
+	'./support/util'
+], function (registerSuite, assert, parser, declare, domConstruct, win, util) {
 
 	var container;
 
@@ -21,9 +21,10 @@ define([
 		name: 'args scope test',
 
 		setup: function () {
+			// jshint maxlen:160
 			container = domConstruct.place('<div>' +
 				'<div data-myscope-type="tests/parser/Class1" data-myscope-id="scopeObj" data-myscope-props="strProp1:\'text\'"></div>' +
-				'<div data-' + dojo._scopeName + '-type="tests/parser/Class1" data-' + dojo._scopeName + '-id="normalObj" data-' + dojo._scopeName + '-props="strProp1:\'text\'"></div>' +
+				util.fixScope('<div data-${dojo}-type="tests/parser/Class1" data-${dojo}-id="normalObj" data-${dojo}-props="strProp1:\'text\'"></div>') +
 			'</div>', win.body());
 		},
 

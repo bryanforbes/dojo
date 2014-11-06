@@ -2,7 +2,6 @@ define([
 	'intern!object',
 	'intern/chai!assert',
 	'../../../parser',
-	'../../../_base/kernel',
 	'dojo/dom-construct',
 	'dojo/_base/array',
 	'dojo/aspect',
@@ -16,16 +15,29 @@ define([
 	'dojo/Stateful',
 	'dojo/Evented',
 	'dojo/text!./parser.html',
-	'dojo/string'
-], function (registerSuite, assert, parser, dojo, domConstruct, array, aspect, declare, dom, domAttr, lang, on, win, dstamp, Stateful, Evented, template, string) {
+	'./support/util'
+], function (
+	registerSuite,
+	assert,
+	parser,
+	domConstruct,
+	array,
+	aspect,
+	declare,
+	dom,
+	domAttr,
+	lang,
+	on,
+	win,
+	dstamp,
+	Stateful,
+	Evented,
+	template,
+	util
+) {
 	var container;
 
-	function fixScope(snippet) {
-		return string.substitute(snippet, {
-			dojo: dojo._scopeName
-		});
-	}
-
+	/* global tests */
 	function setup(id, shouldReturn) {
 		return function () {
 			var MyNonDojoClass = window.MyNonDojoClass = function () {};
@@ -243,7 +255,7 @@ define([
 				this.fooCalled = true;
 			};
 
-			container = domConstruct.place(fixScope(template), document.body);
+			container = domConstruct.place(util.fixScope(template), document.body);
 			var el = id ? dom.byId(id) : null,
 				ret = parser.parse(el);
 
@@ -263,10 +275,12 @@ define([
 
 		teardown: teardown,
 
+		/* global obj */
 		'data-dojo-id': function () {
 			assert.isObject(obj);
 		},
 
+		/* global obj3 */
 		'JsId': function () {
 			assert.isObject(obj3);
 		},
@@ -311,7 +325,8 @@ define([
 			assert.ok(isNaN(obj.dateProp2));
 
 			// dateProp3='now', should map to current date
-			assert.equal(dstamp.toISOString(obj.dateProp3, { selector: 'date' }), dstamp.toISOString(new Date(), { selector: 'date' }));
+			assert.equal(dstamp.toISOString(obj.dateProp3, { selector: 'date' }),
+				dstamp.toISOString(new Date(), { selector: 'date' }));
 		},
 
 		'unwanted params': function () {
@@ -328,7 +343,7 @@ define([
 					['strProp1', 'strProp2',
 						// TODO: as soon as parser is fixed, remove the
 						// next line:
-						dojo._scopeName + 'type',
+						util.fixScope('${dojo}type'),
 						'intProp',
 						'arrProp', 'arrProp2',
 						'boolProp1', 'boolProp2',
@@ -342,12 +357,14 @@ define([
 		},
 
 		'disabled flag': function () {
+			/* global disabledObj */
 			assert.isBoolean(disabledObj.disabled);
 			assert.isTrue(disabledObj.disabled);
 			assert.isFalse(disabledObj.checked);
 		},
 
 		'checked flag': function () {
+			/* global checkedObj */
 			assert.isBoolean(checkedObj.checked);
 			assert.isFalse(checkedObj.disabled);
 			assert.isTrue(checkedObj.checked);
@@ -391,6 +408,7 @@ define([
 			assert.isTrue(obj3.fromMarkup);
 		},
 
+		/* global obj4 */
 		'markup factory class': function () {
 			assert.isTrue(lang.exists('obj4'), 'obj4 exists');
 			assert.equal(obj4.classCtor, tests.parser.Class3);
@@ -447,21 +465,28 @@ define([
 		'cache refresh': function () {
 			// Add new node to be parsed, referencing a widget that the parser has already
 			// dealt with (and thus cached)
-			var wrapper = domConstruct.place(fixScope('<div><div ${dojo}Type="tests.parser.Class3" newParam=12345>hi</div></div>'), win.body(), 'last');
+			var wrapper = domConstruct.place(
+				util.fixScope('<div><div ${dojo}Type="tests.parser.Class3" newParam=12345>hi</div></div>'),
+				win.body(), 'last');
 
-			// Modify Class3's superclass widget to have new parameter (thus Class3 inherits it)
-			lang.extend(tests.parser.Class2, {
-				newParam: 0
-			});
+			try {
+				// Modify Class3's superclass widget to have new parameter (thus Class3 inherits it)
+				lang.extend(tests.parser.Class2, {
+					newParam: 0
+				});
 
-			// Run the parser and see if it reads in newParam
-			var widgets = parser.parse({rootNode: wrapper});
-			assert.lengthOf(widgets, 1, 'parsed newly inserted parserTest widget');
-			assert.equal(widgets[0].params.newparam, 12345, 'new parameter parsed');
-			domConstruct.destroy(wrapper);
+				// Run the parser and see if it reads in newParam
+				var widgets = parser.parse({ rootNode: wrapper });
+				assert.lengthOf(widgets, 1);
+				assert.equal(widgets[0].params.newParam, 12345);
+			}
+			finally {
+				domConstruct.destroy(wrapper);
+			}
 		},
 
 		// Test that parser recurses correctly, except when there's a stopParser flag not to
+		/* global container1, contained1, container2, contained2 */
 		'recurse': function () {
 			assert.isDefined(container1, 'normal container created');
 			assert.isDefined(container1.incr, 'script tag works too');
@@ -474,6 +499,7 @@ define([
 			assert.isUndefined(window.contained4, 'child widget 2 not created');
 		},
 
+		/* global html5simple, html5simple2 */
 		'simple HTML5': function () {
 			assert.isObject(html5simple, 'data-dojo-id export');
 			assert.isObject(html5simple2, 'data-dojo-id export');
@@ -493,12 +519,14 @@ define([
 			assert.equal(it.d(), it, 'simple \'return this\' function');
 		},
 
+		/* global html5simple3 */
 		'HTML5 inherited': function () {
 			assert.isObject(html5simple3);
 			var val = html5simple3.afn();
 			assert.equal(val, html5simple3.a * 2, 'afn() overrides default but calls inherited');
 		},
 
+		/* global htmldojomethod */
 		'HTML5 with method': function () {
 			// testing data-dojo-event and data-dojo-args support for dojo/method and dojo/connect
 			assert.isObject(htmldojomethod);
@@ -512,6 +540,7 @@ define([
 			assert.equal(htmldojomethod._fromvalue, 2, 'ensures connected was executed in scope');
 		},
 
+		/* global objOnWatch */
 		'test watch': function () {
 			// testing script-type dojo/watch and dojo/on
 			assert.isObject(objOnWatch);
@@ -523,6 +552,7 @@ define([
 			assert.isTrue(objOnWatch.boolProp1, 'ensure on executed in scope');
 		},
 
+		/* global on_form */
 		'on': function () {
 			/*jshint camelcase:false*/
 			// testing script-type dojo/on, when script comes after another element
@@ -533,6 +563,7 @@ define([
 		},
 
 
+		/* global objAspect */
 		'aspect': function () {
 			// testing script-type dojo/aspect
 			assert.isObject(objAspect);
@@ -556,6 +587,7 @@ define([
 			assert.isTrue(objAspect.method4after, 'after advice fired');
 		},
 
+		/* global objAMDWidget */
 		'mid': function () {
 			// testing specifying data-dojo-type as mid
 			assert.isObject(objAMDWidget);
@@ -571,6 +603,7 @@ define([
 		teardown: teardown,
 
 		// Test that dir=rtl or dir=ltr setting trickles down from root node
+		/* global setRtl, inheritRtl, inheritRtl2, inheritLtr, setLtr */
 		'dir attribute': function () {
 			parser.parse('dirSection1');
 			parser.parse('dirSection2');
@@ -581,6 +614,7 @@ define([
 			assert.equal(setLtr.dir, 'ltr', 'direct setting of dir=ltr overrides inherited RTL');
 		},
 
+		/* global noLang, inheritedLang, specifiedLang */
 		'lang attribute': function () {
 			parser.parse('langSection');
 			assert.notProperty(noLang.params, 'lang', 'no lang');
@@ -588,6 +622,7 @@ define([
 			assert.equal(specifiedLang.lang, 'en_us', 'direct setting of lang overrides inherited');
 		},
 
+		/* global noTextdir, inheritedTextdir, specifiedTextdir */
 		'textDir attribute': function () {
 			parser.parse('textDirSection');
 			assert.notProperty(noTextdir.params, 'textDir', 'no textdir');
@@ -599,12 +634,13 @@ define([
 			// Test that calling parser.parse(nodeX) will inherit dir/lang/etc. settings
 			// even from <html>
 
-			var textdirAttr = 'data-' + dojo._scopeName + '-textdir';
+			var textdirAttr = util.fixScope('data-${dojo}-textdir');
 			var attrs = { dir: 'rtl', lang: 'ja-jp' };
 			attrs[textdirAttr] = 'auto';
 			domAttr.set(win.doc.documentElement, attrs);
 			parser.parse('bidiInheritanceFromHtml');
 
+			/* global inheritedFromHtml */
 			assert.equal(inheritedFromHtml.params.dir, 'rtl', 'dir');
 			assert.equal(inheritedFromHtml.params.lang, 'ja-jp', 'lang');
 			assert.equal(inheritedFromHtml.params.textDir, 'auto', 'textDir');
@@ -725,6 +761,7 @@ define([
 
 		teardown: teardown,
 
+		/* global mixedObj */
 		'mixed': function () {
 			parser.parse(dom.byId('mixedContainer'));
 			assert.isObject(mixedObj, 'widget created');
@@ -752,6 +789,7 @@ define([
 					aspect.after(this.domNode, 'onclick', lang.hitch(this, 'onClick'));
 				}
 			});
+
 			buttonClicked = function () {
 				console.log('markup click');
 			};	// markup says onClick='buttonClicked'
@@ -760,6 +798,7 @@ define([
 			parser.parse('functions');
 
 			// Should have created an instance called 'button' where button.onClick == buttonClicked
+			/* global button, buttonClicked */
 			assert.isObject(button, 'widget created');
 			assert.isFunction(button.onClick, 'created as function');
 			assert.isTrue(buttonClicked === button.onClick, 'points to specified function');
@@ -773,6 +812,7 @@ define([
 
 		teardown: teardown,
 
+		/* global objC1, objC2 */
 		'construct1': function () {
 			// var nodes = [dom.byId('objC1'), dom.byId('objC2')];
 
@@ -794,6 +834,7 @@ define([
 		teardown: teardown,
 
 		'mixins': function () {
+			/* global resultMixins1, resultMixins2 */
 			assert.ok(resultMixins1, 'object using data-dojo-mixins created from an already parsed type');
 			assert.isTrue(resultMixins1.mixin1Done, 'mixin1 correctly mixed in');
 			assert.isTrue(resultMixins1.mixin2Done, 'mixin2 correctly mixed in');
@@ -804,6 +845,7 @@ define([
 			assert.isTrue(resultMixins2.mixin2Done, 'mixin2 correctly mixed in');
 			assert.isTrue(resultMixins2.amdMixinDone, 'amd mixin correctly mixed in');
 
+			/* global resultNonDojoMixin */
 			assert.isTrue(resultNonDojoMixin.expectedClass, 'correct class is returned for composeJS mixin');
 			assert.equal(resultNonDojoMixin.params.length, 2, 'correct # of params were passed to compose JS');
 			assert.equal(resultNonDojoMixin.params[0], tests.parser.Mixin1, 'correct param 1');
@@ -820,6 +862,7 @@ define([
 
 		'doubleConnect': function () {
 			// Class used in 'behavioral' <div>
+			/* global Behavioral1:true */
 			Behavioral1 = declare(null, {
 				constructor: function (params, node) {
 					on(node, 'click', lang.hitch(this, 'onClick'));
@@ -842,6 +885,7 @@ define([
 			// Trigger click event, and make sure that handler was only called once.
 			on.emit(dom.byId('bh1'), 'click', {bubbles: true, cancelable: true});
 
+			/* global behavioralClickCounter */
 			assert.equal(behavioralClickCounter, 1, 'one click event processed');
 
 			assert.equal(dom.byId('bh1').getAttribute('foo'), 'bar', 'foo attribute not removed from widget DOMNode');
@@ -859,6 +903,7 @@ define([
 			var td = this.async();
 
 			parser.parse('declarativeRequire').then(td.callback(function () {
+				/* global dr1, dr2, dr3, dr4, dr5 */
 				assert.isObject(dr1, 'object using MID mapped to return var');
 				assert.equal(dr1.params.foo, 'bar', 'parameters set on instantiation');
 				assert.isObject(dr2, 'object using MID mapped to return var');
@@ -876,6 +921,7 @@ define([
 			parser.parse('contextRequire', {
 				contextRequire: require
 			}).then(td.callback(function () {
+				/* global cr1, cr2, cr3, cr4 */
 				assert.isObject(cr1, 'object using relative MID mapped to return var');
 				assert.equal(cr1.params.foo, 'bar', 'parameters set on instantiation');
 				assert.isObject(cr2, 'object using relative MID mapped to return var');
@@ -912,7 +958,8 @@ define([
 				throw new Error('shouldn\'t get here');
 			}), td.callback(function (e) {
 				assert.equal(typeof e, 'object', 'error object returned');
-				assert.equal(e.toString(), 'Error: Unable to resolve constructor for: \'some.type\'', 'proper error value returned');
+				assert.equal(e.toString(),
+					'Error: Unable to resolve constructor for: \'some.type\'', 'proper error value returned');
 			}));
 		}
 	});
