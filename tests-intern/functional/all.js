@@ -4,6 +4,7 @@ define([
 	//'./_base/eventMouse'
 	'./behavior',
 	'./cookie',
+	'./dnd',
 	'./fx',
 	'./fx/Toggler',
 	'./on',
