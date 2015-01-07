@@ -1,15 +1,15 @@
 # Module tests to be converted
 
-* NodeList-manipulate
-* NodeList-traverse
+x NodeList-manipulate
+x NodeList-traverse
 * [dnd](https://github.com/bryanforbes/dojo/pull/81)
-* \_base/NodeList
+x \_base/NodeList
 * [\_base/html](https://github.com/bryanforbes/dojo/pull/74)
 * [\_base/query](https://github.com/bryanforbes/dojo/pull/64)
 * [\_base/sniff](https://github.com/bryanforbes/dojo/pull/66)
 * [\_base/window](https://github.com/bryanforbes/dojo/pull/68)
-* dom-attr
-* dom-construct
+* dom-attr (https://github.com/bryanforbes/dojo/pull/83)
+x dom-construct
 * dom-prop
 * dom-style
 * [errors](https://github.com/bryanforbes/dojo/pull/56)
